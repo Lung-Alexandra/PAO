@@ -8,7 +8,7 @@
 3. Stergere imagine/videoclip din galerie
 4. Cautare imagine/videoclip in galerie dupa nume
 5. Actualizare (nume si descriere) imagine/videoclip din galerie 
-6. Adaugare eticheta la imagine/videoclip
+6. Adaugare/Stergere eticheta la imagine/videoclip
 7. Vizualizare elemente dupa eticheta
 8. Sortare imagini/videoclipuri dupa diferite criterii
 9. Creare album gol

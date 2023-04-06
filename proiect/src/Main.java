@@ -301,29 +301,58 @@ public class Main {
 
     //14
     private static void filtrareDupaData() {
-        System.out.println("Introduceti data de inceput (format: yyyy/MM/dd):");
-        Date data = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        while (data == null) {
-            try {
-                data = dateFormat.parse(scanner.nextLine());
-            } catch (ParseException e) {
-                System.out.println("Data introdusa este invalida. Incercati din nou:");
+        System.out.println("Introduceti operatia (nume/marime/data):");
+        String tip = scanner.nextLine().trim();
+        switch (tip) {
+            case "nume" -> {
+                System.out.println("Introduceti numle:");
+                String nume = scanner.nextLine().trim();
+                List<Element> elDupaData = Filtru.filtrareDupaNume(serviciuGalerie.viewAllElements(), nume);
+                System.out.println("Imagini dupa nume:");
+                for (Element el : elDupaData) {
+                    System.out.println(el);
+                }
             }
-        }
-        System.out.println("Introduceti data de sfarsit (format: yyyy/MM/dd):");
-        Date data2 = null;
-        while (data2 == null) {
-            try {
-                data2 = dateFormat.parse(scanner.nextLine());
-            } catch (ParseException e) {
-                System.out.println("Data introdusa este invalida. Incercati din nou:");
+            case "data" -> {
+                System.out.println("Introduceti data de inceput (format: yyyy/MM/dd):");
+                Date data = null;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                while (data == null) {
+                    try {
+                        data = dateFormat.parse(scanner.nextLine());
+                    } catch (ParseException e) {
+                        System.out.println("Data introdusa este invalida. Incercati din nou:");
+                    }
+                }
+                System.out.println("Introduceti data de sfarsit (format: yyyy/MM/dd):");
+                Date data2 = null;
+                while (data2 == null) {
+                    try {
+                        data2 = dateFormat.parse(scanner.nextLine());
+                    } catch (ParseException e) {
+                        System.out.println("Data introdusa este invalida. Incercati din nou:");
+                    }
+                }
+                List<Element> elDupaData = Filtru.filtrareDupaData(serviciuGalerie.viewAllElements(), data, data2);
+                System.out.println("Imagini dupa data:");
+                for (Element el : elDupaData) {
+                    System.out.println(el);
+                }
             }
-        }
-        List<Element> elDupaData = Filtru.filtrareDupaData(serviciuGalerie.viewAllElements(), data, data2);
-        System.out.println("Imagini dupa data:");
-        for (Element el : elDupaData) {
-            System.out.println(el);
+            case "size" -> {
+                System.out.println("Introduceti dimensiunea minima(nr Intreg):");
+                int dimmin = scanner.nextInt();
+                scanner.nextLine();
+                System.out.println("Introduceti dimensiunea maxima(nr intreg):");
+                int dimmax = scanner.nextInt();
+                scanner.nextLine();
+                List<Element> elDupaData = Filtru.filtrareDupaDimensiune(serviciuGalerie.viewAllElements(), dimmin, dimmax);
+                System.out.println("Imagini dupa dimensiune:");
+                for (Element el : elDupaData) {
+                    System.out.println(el);
+                }
+            }
+            default -> System.out.println("Operatie invalida!");
         }
     }
 }
