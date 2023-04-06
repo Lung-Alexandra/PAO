@@ -15,7 +15,8 @@
 10. Adaugare elemente in album
 11. Stergere element din album
 12. Stergere album
-13. Filtrare imagini/videoclipuri dupa diferite criterii
+13. Vizualizare elemente album
+14. Filtrare imagini/videoclipuri dupa diferite criterii
 ## Tipuri de obiecte:
 
 
