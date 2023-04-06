@@ -6,14 +6,14 @@ import model.*;
 
 
 public class ServiciuGalerie {
-    private  Map<String, Element> elements = new HashMap<>();
-    private  Map<String, List<String>> tags = new HashMap<>();
-    private  List<Album> albums = new ArrayList<>();
+    private Map<String, Element> elements = new HashMap<>();
+    private Map<String, Eticheta> tags = new HashMap<>();
+    private List<Album> albums = new ArrayList<>();
 
     public ServiciuGalerie() {
     }
 
-    public ServiciuGalerie(Map<String, Element> elements, Map<String, List<String>> tags, List<Album> albums) {
+    public ServiciuGalerie(Map<String, Element> elements, Map<String, Eticheta> tags, List<Album> albums) {
         this.elements = elements;
         this.tags = tags;
         this.albums = albums;
@@ -59,40 +59,59 @@ public class ServiciuGalerie {
 
     //  Adaugarea unei etichete pentru o imagine/videoclip
     public void addTag(String name, String tag) {
-        List<String> elementTags = tags.computeIfAbsent(name, k -> new ArrayList<>());
-        elementTags.add(tag);
         Element el = elements.get(name);
-        Eticheta et = new Eticheta(tag);
-        el.adaugaEticheta(et);
+        if (el != null) {
+            Eticheta et = new Eticheta(tag);
+            if (!tags.containsValue(et))
+                tags.put(et.getNume(), et);
+            if (!el.contineEticheta(et)) {
+                el.adaugaEticheta(et);
+                System.out.println("Eticheta adaugata cu succes.");
+            } else {
+                System.out.println("Eticheta deja existenta la element.");
+            }
+        } else {
+            System.out.println("Elementul nu exista!");
+        }
+
     }
     //  Stergerea unei etichete pentru o imagine/videoclip
 
     public void removeTag(String name, String tag) {
-        if (tags.containsKey(name)) {
-            List<String> elementTags = tags.get(name);
-            if (elementTags.contains(tag)) {
-                elementTags.remove(tag);
-                Element el = elements.get(name);
-                Eticheta et = new Eticheta(tag);
+        Element el = elements.get(name);
+        if (el != null) {
+            Eticheta et = new Eticheta(tag);
+            if (el.contineEticheta(et)) {
                 el.stergeEticheta(et);
+                System.out.println("Eticheta a fost stearsa cu succes.");
             } else {
                 System.out.println("Tag '" + tag + "' not found for element '" + name + "'.");
             }
         } else {
-            System.out.println("Element '" + name + "' not found.");
+            System.out.println("Elementul nu exista!");
         }
     }
 
     // Vizualizarea imaginilor/videoclipurilor cu un anumit tag
-    public List<Element> viewElementsByTag(String tag) {
+    public void viewElementsByTag(String tag) {
         List<Element> result = new ArrayList<>();
-        for (Map.Entry<String, List<String>> entry : tags.entrySet()) {
-            if (entry.getValue().contains(tag)) {
-                result.add(elements.get(entry.getKey()));
+        for (Element element : elements.values()) {
+            if (element.contineEticheta(new Eticheta(tag))) {
+                result.add(element);
             }
         }
-        return result;
+        if (!result.isEmpty()) {
+            for (Element el : result) {
+                System.out.println(el);
+                System.out.println();
+            }
+        } else {
+            System.out.println("Nu exista elemente cu eticheta " + tag + ".");
+        }
+
+
     }
+
 
     // Sortarea imaginilor/videoclipurilor dupa nume, data, dimensiune sau alte criterii
     public List<Element> sortElements(String sortBy) {
@@ -109,12 +128,10 @@ public class ServiciuGalerie {
             Element element = elements.get(elementName);
             if (element != null) {
                 album.addElement(element);
-            }
-            else{
+            } else {
                 System.out.println("Elementul nu exista!");
             }
-        }
-        else{
+        } else {
             System.out.println("Albumul nu exista!");
         }
     }
@@ -126,12 +143,10 @@ public class ServiciuGalerie {
             Element element = elements.get(elementName);
             if (element != null) {
                 album.removeElement(elementName);
-            }
-            else{
+            } else {
                 System.out.println("Elementul nu exista!");
             }
-        }
-        else{
+        } else {
             System.out.println("Albumul nu exista!");
         }
     }
@@ -149,8 +164,7 @@ public class ServiciuGalerie {
             } else {
                 System.out.println("Albumul " + albumName + " este gol.");
             }
-        }
-        else{
+        } else {
             System.out.println("Albumul nu exista!");
         }
 

@@ -15,7 +15,7 @@ public class Main {
 
     // Date predefinite pentru testare
     static Map<String, Element> elements = new HashMap<>();
-    static Map<String, List<String>> tags = new HashMap<>();
+    static Map<String, Eticheta> tags = new HashMap<>();
     static List<Album> albums = new ArrayList<>();
     private static final ServiciuGalerie serviciuGalerie = new ServiciuGalerie(elements, tags, albums);
 
@@ -25,17 +25,17 @@ public class Main {
         Fotografie foto1 = new Fotografie("img2", "desc1", 500, new Date(2000, Calendar.NOVEMBER, 12), "1900*240", null, "tipcam", "set");
         Fotografie foto2 = new Fotografie("img3", "desc2", 100, new Date(2000, Calendar.NOVEMBER, 20), "1900*240", null, "tipcam", "set");
         Fotografie foto3 = new Fotografie("img4", "desc3", 700, new Date(2000, Calendar.DECEMBER, 2), "1900*240", null, "tipcam", "set");
+        Videoclip vid1 = new Videoclip("vid1", "desc3", 500, new Date(2000, Calendar.DECEMBER, 5), 1900);
+        Videoclip vid2 = new Videoclip("vid2", "desc3", 400, new Date(2000, Calendar.DECEMBER, 3), 1800);
+
         Album album1 = new Album("Album1");
         Album album2 = new Album("Album2");
         elements.put(foto.getName(), foto);
         elements.put(foto1.getName(), foto1);
         elements.put(foto2.getName(), foto2);
         elements.put(foto3.getName(), foto3);
-
-        tags.put(foto.getName(), Arrays.asList("tag1", "tag2"));
-        tags.put(foto1.getName(), Arrays.asList("tag2", "tag3"));
-        tags.put(foto3.getName(), Arrays.asList("tag2", "tag3"));
-        tags.put(foto2.getName(), Arrays.asList("tag1", "tag3"));
+        elements.put(vid1.getName(), vid1);
+        elements.put(vid2.getName(), vid2);
 
         albums.add(album1);
         albums.add(album2);
@@ -44,6 +44,8 @@ public class Main {
         album1.addElement(foto);
         album1.addElement(foto2);
         album2.addElement(foto3);
+        album2.addElement(vid1);
+        album2.addElement(vid2);
 
 
         boolean exit = false;
@@ -208,13 +210,13 @@ public class Main {
             System.out.println("Introduceti numele etichetei:");
             String tag = scanner.nextLine();
             serviciuGalerie.addTag(numeElementTag, tag);
-            System.out.println("Eticheta adaugata cu succes.");
+
         } else if (tip.equals("stergere")) {
             System.out.println("Introduceti numele elementului:");
             String numeElementTag = scanner.nextLine();
             System.out.println("Introduceti numele etichetei:");
             String nume = scanner.nextLine();
-            serviciuGalerie.removeTag(numeElementTag,nume);
+            serviciuGalerie.removeTag(numeElementTag, nume);
         } else {
             System.out.println("Operatie invalida!");
         }
@@ -224,16 +226,7 @@ public class Main {
     private static void vizualizareDupaEticheta() {
         System.out.println("Introduceti eticheta-ul:");
         String tagCautare = scanner.nextLine();
-        List<Element> elementeCuTag = serviciuGalerie.viewElementsByTag(tagCautare);
-        if (elementeCuTag.isEmpty()) {
-            System.out.println("Nu exista elemente cu acest tag!");
-        } else {
-            for (Element element : elementeCuTag) {
-                System.out.println(element);
-                System.out.println();
-            }
-        }
-
+        serviciuGalerie.viewElementsByTag(tagCautare);
     }
 
     // 8
@@ -307,9 +300,13 @@ public class Main {
                 System.out.println("Introduceti numle:");
                 String nume = scanner.nextLine().trim();
                 List<Element> elDupaData = Filtru.filtrareDupaNume(serviciuGalerie.viewAllElements(), nume);
-                System.out.println("Imagini dupa nume:");
-                for (Element el : elDupaData) {
-                    System.out.println(el);
+                if (!elDupaData.isEmpty()) {
+                    System.out.println("Imagini dupa nume:");
+                    for (Element el : elDupaData) {
+                        System.out.println(el);
+                    }
+                } else {
+                    System.out.println("Nu exista elemente!");
                 }
             }
             case "data" -> {
@@ -333,12 +330,16 @@ public class Main {
                     }
                 }
                 List<Element> elDupaData = Filtru.filtrareDupaData(serviciuGalerie.viewAllElements(), data, data2);
-                System.out.println("Imagini dupa data:");
-                for (Element el : elDupaData) {
-                    System.out.println(el);
+                if (!elDupaData.isEmpty()) {
+                    System.out.println("Imagini dupa data:");
+                    for (Element el : elDupaData) {
+                        System.out.println(el);
+                    }
+                } else {
+                    System.out.println("Nu exista elemente!");
                 }
             }
-            case "size" -> {
+            case "marime" -> {
                 System.out.println("Introduceti dimensiunea minima(nr Intreg):");
                 int dimmin = scanner.nextInt();
                 scanner.nextLine();
@@ -346,9 +347,13 @@ public class Main {
                 int dimmax = scanner.nextInt();
                 scanner.nextLine();
                 List<Element> elDupaData = Filtru.filtrareDupaDimensiune(serviciuGalerie.viewAllElements(), dimmin, dimmax);
-                System.out.println("Imagini dupa dimensiune:");
-                for (Element el : elDupaData) {
-                    System.out.println(el);
+                if (!elDupaData.isEmpty()) {
+                    System.out.println("Imagini dupa dimensiune:");
+                    for (Element el : elDupaData) {
+                        System.out.println(el);
+                    }
+                } else {
+                    System.out.println("Nu exista elemente!");
                 }
             }
             default -> System.out.println("Operatie invalida!");

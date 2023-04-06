@@ -9,7 +9,7 @@ public class Element implements Comparator<Element> {
     private String description;
     private int size;
     private Date creationDate;
-
+    private ArrayList<Eticheta> etichete;
     public void setName(String name) {
         this.name = name;
     }
@@ -26,7 +26,6 @@ public class Element implements Comparator<Element> {
         this.creationDate = creationDate;
     }
 
-    private ArrayList<Eticheta> etichete;
     public Element(String name, String description, int size, Date creationDate) {
         this.name = name;
         this.description = description;
