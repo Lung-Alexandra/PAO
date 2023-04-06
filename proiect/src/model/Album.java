@@ -59,7 +59,7 @@ public class Album {
         return "Album{" +
                 "\nnume=" + nume  +
                 "\nelemente=" + elemente +
-                '}';
+                "\n}";
     }
 
     public void addElement(Element element) {

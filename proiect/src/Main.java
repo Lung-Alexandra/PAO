@@ -246,8 +246,8 @@ public class Main {
         List<Element> elementeSortate = null;
         switch (optiuneSortare) {
             case 1 -> elementeSortate = serviciuGalerie.sortElements("name");
-            case 2 -> elementeSortate = serviciuGalerie.sortElements("date");
-            case 3 -> elementeSortate = serviciuGalerie.sortElements("size");
+            case 2 -> elementeSortate = serviciuGalerie.sortElements("size");
+            case 3 -> elementeSortate = serviciuGalerie.sortElements("date");
             default -> System.out.println("Optiune invalida!");
         }
         if (elementeSortate != null) {

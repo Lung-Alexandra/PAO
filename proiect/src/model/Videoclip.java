@@ -23,7 +23,7 @@ public class Videoclip extends Element {
     public String toString() {
         return "Videoclip {\n" + super.toString()+
                 "\nduration=" + duration +
-                '}';
+                "\n}";
     }
 }
 

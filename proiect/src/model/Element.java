@@ -85,7 +85,7 @@ public class Element implements Comparator<Element> {
                 "description=" + description  +
                 "\nsize=" + size +
                 "\ncreationDate=" + creationDate +
-                "\netichete=" + etichete + "\n";
+                "\netichete=" + etichete;
     }
 }
 

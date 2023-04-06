@@ -17,6 +17,6 @@ public class Eticheta {
 
     @Override
     public String toString() {
-        return "nume='" + nume ;
+        return "nume=" + nume ;
     }
 }
