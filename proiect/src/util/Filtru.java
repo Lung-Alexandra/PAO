@@ -1,7 +1,12 @@
 package util;
 import model.*;
+
+import java.time.LocalDate;
 import java.util.*;
 public class Filtru {
+    private Filtru() {
+    }
+
     public static List<Element> filtrareDupaNume(List<Element> elem, String nume) {
         List<Element> rezultat = new ArrayList<>();
         for (Element el : elem) {
@@ -22,10 +27,10 @@ public class Filtru {
         return rezultat;
     }
 
-    public static List<Element> filtrareDupaData(List<Element> elem, Date dataInceput, Date dataSfarsit) {
+    public static List<Element> filtrareDupaData(List<Element> elem, LocalDate dataInceput, LocalDate dataSfarsit) {
         List<Element> rezultat = new ArrayList<>();
         for (Element el : elem) {
-            if (el.getCreationDate().after(dataInceput) && el.getCreationDate().before(dataSfarsit)) {
+            if (el.getCreationDate().isAfter(dataInceput) && el.getCreationDate().isBefore(dataSfarsit)) {
                 rezultat.add(el);
             }
         }

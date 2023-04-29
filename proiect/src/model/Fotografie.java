@@ -1,11 +1,12 @@
 package model;
 
-import java.util.*;
+import java.time.LocalDate;
+
 public class Fotografie extends Imagine {
     private String cameraType;
     private String cameraSettings;
 
-    public Fotografie(String name, String description, int size, Date creationDate, String resolution, String location,
+    public Fotografie(String name, String description, int size, LocalDate creationDate, String resolution, String location,
                       String cameraType, String cameraSettings) {
         super(name, description, size, creationDate, resolution, location);
         this.cameraType = cameraType;

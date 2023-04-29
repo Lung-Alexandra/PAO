@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -8,7 +9,7 @@ public class Element implements Comparator<Element> {
     private String name;
     private String description;
     private int size;
-    private Date creationDate;
+    private LocalDate creationDate;
     private ArrayList<Eticheta> etichete;
     public void setName(String name) {
         this.name = name;
@@ -22,11 +23,11 @@ public class Element implements Comparator<Element> {
         this.size = size;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Element(String name, String description, int size, Date creationDate) {
+    public Element(String name, String description, int size, LocalDate creationDate) {
         this.name = name;
         this.description = description;
         this.size = size;
@@ -46,7 +47,7 @@ public class Element implements Comparator<Element> {
         return size;
     }
 
-    public Date getCreationDate() {
+    public LocalDate getCreationDate() {
         return creationDate;
     }
 

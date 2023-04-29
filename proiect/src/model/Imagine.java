@@ -1,11 +1,12 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.*;
 public class Imagine extends Element {
     private String resolution;
     private String location;
 
-    public Imagine(String name, String description, int size, Date creationDate, String resolution, String location) {
+    public Imagine(String name, String description, int size, LocalDate creationDate, String resolution, String location) {
         super(name, description, size, creationDate);
         this.resolution = resolution;
         this.location = location;

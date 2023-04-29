@@ -1,11 +1,11 @@
 package model;
 
-import java.util.*;
+import java.time.LocalDate;
 
 public class Videoclip extends Element {
     private int duration;
 
-    public Videoclip(String name, String description, int size, Date creationDate, int duration) {
+    public Videoclip(String name, String description, int size, LocalDate creationDate, int duration) {
         super(name, description, size, creationDate);
         this.duration = duration;
     }

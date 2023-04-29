@@ -1,10 +1,13 @@
 import model.*;
 
-import servicii.ServiciuGalerie;
+import service.ServiciuGalerie;
 import util.Filtru;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
@@ -21,12 +24,13 @@ public class Main {
 
 
     public static void main(String[] args) {
-        Fotografie foto = new Fotografie("img1", "desc", 200, new Date(2000, Calendar.DECEMBER, 12), "1900*240", null, "tipcam", "set");
-        Fotografie foto1 = new Fotografie("img2", "desc1", 500, new Date(2000, Calendar.NOVEMBER, 12), "1900*240", null, "tipcam", "set");
-        Fotografie foto2 = new Fotografie("img3", "desc2", 100, new Date(2000, Calendar.NOVEMBER, 20), "1900*240", null, "tipcam", "set");
-        Fotografie foto3 = new Fotografie("img4", "desc3", 700, new Date(2000, Calendar.DECEMBER, 2), "1900*240", null, "tipcam", "set");
-        Videoclip vid1 = new Videoclip("vid1", "desc3", 500, new Date(2000, Calendar.DECEMBER, 5), 1900);
-        Videoclip vid2 = new Videoclip("vid2", "desc3", 400, new Date(2000, Calendar.DECEMBER, 3), 1800);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        Fotografie foto = new Fotografie("img1", "desc", 200, LocalDate.parse("12/12/2000",formatter), "1900*240", null, "tipcam", "set");
+        Fotografie foto1 = new Fotografie("img2", "desc1", 500, LocalDate.parse("12/11/2000",formatter), "1900*240", null, "tipcam", "set");
+        Fotografie foto2 = new Fotografie("img3", "desc2", 100, LocalDate.parse("20/11/2000",formatter), "1900*240", null, "tipcam", "set");
+        Fotografie foto3 = new Fotografie("img4", "desc3", 700, LocalDate.parse("2/12/2000",formatter), "1900*240", null, "tipcam", "set");
+        Videoclip vid1 = new Videoclip("vid1", "desc3", 500,LocalDate.parse("5/12/2000",formatter), 1900);
+        Videoclip vid2 = new Videoclip("vid2", "desc3", 400,LocalDate.parse("3/12/2000",formatter), 1800);
 
         Album album1 = new Album("Album1");
         Album album2 = new Album("Album2");
@@ -310,22 +314,22 @@ public class Main {
                 }
             }
             case "data" -> {
-                System.out.println("Introduceti data de inceput (format: yyyy/MM/dd):");
-                Date data = null;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                System.out.println("Introduceti data de inceput (format: dd/MM/yyyy):");
+                LocalDate data = null;
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                 while (data == null) {
                     try {
-                        data = dateFormat.parse(scanner.nextLine());
-                    } catch (ParseException e) {
+                        data = LocalDate.parse(scanner.nextLine(),formatter);
+                    } catch (DateTimeParseException e) {
                         System.out.println("Data introdusa este invalida. Incercati din nou:");
                     }
                 }
                 System.out.println("Introduceti data de sfarsit (format: yyyy/MM/dd):");
-                Date data2 = null;
+                LocalDate data2 = null;
                 while (data2 == null) {
                     try {
-                        data2 = dateFormat.parse(scanner.nextLine());
-                    } catch (ParseException e) {
+                        data2 = LocalDate.parse(scanner.nextLine(),formatter);
+                    } catch (DateTimeParseException e) {
                         System.out.println("Data introdusa este invalida. Incercati din nou:");
                     }
                 }
