@@ -53,4 +53,4 @@ crearea și gestionarea etichetelor și a albumelor, precum și alte operații s
 cum ar fi numele, data, dimensiunea sau alte atribute.
 
 9.ElementComparator:
--o clasă ce furnizează o metodă de comparare a două obiecte de tip Element pe baza unui criteriu specificat.
+- o clasă ce furnizează o metodă de comparare a două obiecte de tip Element pe baza unui criteriu specificat.
