@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -10,6 +11,7 @@ public class Element implements Comparator<Element> {
     private String description;
     private int size;
     private LocalDate creationDate;
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private ArrayList<Eticheta> etichete;
     public void setName(String name) {
         this.name = name;
@@ -84,7 +86,7 @@ public class Element implements Comparator<Element> {
         return "name=" + name + '\n' +
                 "description=" + description  +
                 "\nsize=" + size +
-                "\ncreationDate=" + creationDate +
+                "\ncreationDate=" + formatter.format(creationDate) +
                 "\netichete=" + etichete;
     }
 }

@@ -26,9 +26,9 @@ public class Main {
         Fotografie foto = new Fotografie("img1", "desc", 200, LocalDate.parse("12/12/2000",formatter), "1900*240", null, "tipcam", "set");
         Fotografie foto1 = new Fotografie("img2", "desc1", 500, LocalDate.parse("12/11/2000",formatter), "1900*240", null, "tipcam", "set");
         Fotografie foto2 = new Fotografie("img3", "desc2", 100, LocalDate.parse("20/11/2000",formatter), "1900*240", null, "tipcam", "set");
-        Fotografie foto3 = new Fotografie("img4", "desc3", 700, LocalDate.parse("2/12/2000",formatter), "1900*240", null, "tipcam", "set");
-        Videoclip vid1 = new Videoclip("vid1", "desc3", 500,LocalDate.parse("5/12/2000",formatter), 1900);
-        Videoclip vid2 = new Videoclip("vid2", "desc3", 400,LocalDate.parse("3/12/2000",formatter), 1800);
+        Fotografie foto3 = new Fotografie("img4", "desc3", 700, LocalDate.parse("02/12/2000",formatter), "1900*240", null, "tipcam", "set");
+        Videoclip vid1 = new Videoclip("vid1", "desc3", 500,LocalDate.parse("05/12/2000",formatter), 1900);
+        Videoclip vid2 = new Videoclip("vid2", "desc3", 400,LocalDate.parse("03/12/2000",formatter), 1800);
 
         Album album1 = new Album("Album1");
         Album album2 = new Album("Album2");
@@ -124,7 +124,7 @@ public class Main {
         String nume = scanner.nextLine().trim();
         System.out.println("Introduceti descrierea:");
         String descriere = scanner.nextLine().trim();
-        System.out.print("Data crearii(yyyy/MM/dd): ");
+        System.out.print("Data crearii(dd/MM/yyyy): ");
         LocalDate data = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         while (data == null) {
