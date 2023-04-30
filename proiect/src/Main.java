@@ -3,8 +3,6 @@ import model.*;
 import service.ServiciuGalerie;
 import util.Filtru;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -127,12 +125,12 @@ public class Main {
         System.out.println("Introduceti descrierea:");
         String descriere = scanner.nextLine().trim();
         System.out.print("Data crearii(yyyy/MM/dd): ");
-        Date data = null;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        LocalDate data = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         while (data == null) {
             try {
-                data = dateFormat.parse(scanner.nextLine());
-            } catch (ParseException e) {
+                data = LocalDate.parse(scanner.nextLine(),formatter);
+            } catch (DateTimeParseException e) {
                 System.out.println("Data introdusa este invalida. Incercati din nou:");
             }
         }

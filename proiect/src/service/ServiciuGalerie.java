@@ -1,5 +1,6 @@
 package service;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import model.*;
@@ -20,7 +21,7 @@ public class ServiciuGalerie {
     }
 
     // Adaugarea unei noi imagini/videoclip in galerie
-    public void addElement(String name, String description, int size, String type, int duration, Date dataCreare, String resolutie, String locatie, String tipcamera, String setaricamera) {
+    public void addElement(String name, String description, int size, String type, int duration, LocalDate dataCreare, String resolutie, String locatie, String tipcamera, String setaricamera) {
         Element element = null;
         if (type.equals("vid")) {
             element = new Videoclip(name, description, size, dataCreare, duration);
