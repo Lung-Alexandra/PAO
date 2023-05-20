@@ -1,6 +1,8 @@
 package service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import model.*;
@@ -200,7 +202,18 @@ public class ServiciuGalerie {
 
         albums.remove(al);
         System.out.println("Album sters cu succes.");
+    }
 
+    //citire data
+    public LocalDate readLocalData(String date) {
+        LocalDate data = null;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        try {
+            data = LocalDate.parse(date, formatter);
+        } catch (DateTimeParseException e) {
+            System.out.println("Data introdusa este invalida. Incercati din nou:");
+        }
+        return data;
     }
 
 }
