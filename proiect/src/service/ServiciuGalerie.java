@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -23,21 +24,25 @@ public class ServiciuGalerie {
     }
 
     // Adaugarea unei noi imagini/videoclip in galerie
-    public void addElement(String name, String description, int size, String type, int duration, LocalDate dataCreare, String resolutie, String locatie, String tipcamera, String setaricamera) {
+    public void addElement(String name, String description, int size, String type, int duration, LocalDate dataCreare, String resolutie, String locatie, String tipcamera, String setaricamera) throws SQLException {
         Element element = null;
         if (type.equals("vid")) {
             element = new Videoclip(name, description, size, dataCreare, duration);
+            JdbcClass.insertVideoclip((Videoclip) element);
         } else if (type.equals("img")) {
             element = new Fotografie(name, description, size, dataCreare, resolutie, locatie, tipcamera, setaricamera);
+            JdbcClass.insertFotografie((Fotografie) element);
         }
         if (element != null) {
             elements.put(element.getName(), element);
         }
+        AuditService.logAction("addElement");
     }
 
     // Stergerea unei imagini sau videoclip din galerie
     public void removeElement(String name) {
         elements.remove(name);
+        AuditService.logAction("removeElement");
     }
 
 
@@ -53,10 +58,12 @@ public class ServiciuGalerie {
             // Adăugăm elementul cu cheia nouă
             elements.put(newName, element);
         }
+        AuditService.logAction("updateElement");
     }
 
     // Vizualizarea unei imagini/videoclip
     public Element viewElement(String name) {
+        AuditService.logAction("viewElement");
         return elements.get(name);
     }
 
@@ -65,18 +72,20 @@ public class ServiciuGalerie {
         Element el = elements.get(name);
         if (el != null) {
             Eticheta et = new Eticheta(tag);
-            if (!tags.containsValue(et))
-                tags.put(et.getNume(), et);
-            if (!el.contineEticheta(et)) {
+            //pentru a evita verificarea manuală a
+            // existenței etichetei înainte de a o
+            // adăuga în map
+            tags.putIfAbsent(et.getNume(), et);
+            if (el.contineEticheta(et)) {
+                System.out.println("Eticheta deja existenta la element.");
+            } else {
                 el.adaugaEticheta(et);
                 System.out.println("Eticheta adaugata cu succes.");
-            } else {
-                System.out.println("Eticheta deja existenta la element.");
             }
         } else {
             System.out.println("Elementul nu exista!");
         }
-
+        AuditService.logAction("addTag");
     }
     //  Stergerea unei etichete pentru o imagine/videoclip
 
@@ -93,6 +102,7 @@ public class ServiciuGalerie {
         } else {
             System.out.println("Elementul nu exista!");
         }
+        AuditService.logAction("removeTag");
     }
 
     // Vizualizarea imaginilor/videoclipurilor cu un anumit tag
@@ -112,7 +122,7 @@ public class ServiciuGalerie {
             System.out.println("Nu exista elemente cu eticheta " + tag + ".");
         }
 
-
+        AuditService.logAction("viewElementsByTag");
     }
 
 
@@ -121,6 +131,7 @@ public class ServiciuGalerie {
         List<Element> result = new ArrayList<>(elements.values());
         ElementComparator comparator = new ElementComparator(sortBy);
         result.sort(comparator);
+        AuditService.logAction("sortElements");
         return result;
     }
 
@@ -137,6 +148,7 @@ public class ServiciuGalerie {
         } else {
             System.out.println("Albumul nu exista!");
         }
+        AuditService.logAction("addElementToAlbum");
     }
 
     // Stergerea unei imagini/videoclip din album
@@ -152,6 +164,7 @@ public class ServiciuGalerie {
         } else {
             System.out.println("Albumul nu exista!");
         }
+        AuditService.logAction("removeElementFromAlbum");
     }
 
     // Vizualizarea continutului unui album
@@ -170,17 +183,20 @@ public class ServiciuGalerie {
         } else {
             System.out.println("Albumul nu exista!");
         }
-
+        AuditService.logAction("viewAlbumContent");
 
     }
 
     // Vizualizarea listei de imagini sau videoclipuri
     public List<Element> viewAllElements() {
+        AuditService.logAction("viewAllElements");
         return new ArrayList<>(elements.values());
     }
 
     // Metoda privata pentru a gasi un album dupa nume
     private Album getAlbumByName(String albumName) {
+        AuditService.logAction("getAlbumByName");
+
         for (Album album : albums) {
             if (album.getNume().equals(albumName)) {
                 return album;
@@ -192,6 +208,7 @@ public class ServiciuGalerie {
 
     // Crearea unui album de imagini/videoclipuri
     public void createAlbum(String albumName) {
+        AuditService.logAction("createAlbum");
         albums.add(new Album(albumName));
     }
 
@@ -202,10 +219,12 @@ public class ServiciuGalerie {
 
         albums.remove(al);
         System.out.println("Album sters cu succes.");
+        AuditService.logAction("deleteAlbum");
     }
 
     //citire data
     public LocalDate readLocalData(String date) {
+        AuditService.logAction("readLocalData");
         LocalDate data = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {

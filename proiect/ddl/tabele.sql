@@ -1,11 +1,13 @@
-drop table  if exists  element;
-drop table  if exists  album;
+drop table  if exists  fotografie;
+drop table  if exists  imagine;
+drop table  if exists  videoclip;
 drop table  if exists  elementalbum;
 drop table  if exists  elementeticheta;
+drop table  if exists  element;
+drop table  if exists  album;
 drop table  if exists  eticheta;
-drop table  if exists  imagine;
-drop table  if exists  fotografie;
-drop table  if exists  videoclip;
+
+
 
 -- Tabela de bază 'Element'
 CREATE TABLE Element
@@ -76,3 +78,4 @@ CREATE TABLE ElementAlbum
 );
 
 select * from Element;
+select * from Imagine;

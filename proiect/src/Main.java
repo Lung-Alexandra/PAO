@@ -1,17 +1,13 @@
 import model.*;
 
+import service.AuditService;
 import service.ServiciuGalerie;
 import util.Filtru;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 
 public class Main {
@@ -54,7 +50,7 @@ public class Main {
         album2.addElement(vid2);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         //for testing
         init();
 
@@ -63,20 +59,20 @@ public class Main {
             afisareMeniu();
             String optiune = scanner.nextLine();
             switch (optiune) {
-                case "1" -> afiseazaElemente();
-                case "2" -> adaugaElement();
-                case "3" -> stergeElement();
-                case "4" -> cautaElement();
-                case "5" -> actualizeaza();
-                case "6" -> adaugaEticheta();
-                case "7" -> vizualizareDupaEticheta();
-                case "8" -> sortareElemente();
-                case "9" -> adaugaAlbum();
-                case "10" -> adaugaElementAlbum();
-                case "11" -> stergeElementAlbum();
-                case "12" -> stergeAlbum();
-                case "13" -> vizualizareElemAlbum();
-                case "14" -> filtrareDupaData();
+                case "1" -> {afiseazaElemente(); AuditService.logAction("afiseazaElemente");}
+                case "2" -> {adaugaElement();AuditService.logAction("adaugaElement");}
+                case "3" -> {stergeElement();AuditService.logAction("stergeElement");}
+                case "4" -> {cautaElement();AuditService.logAction("cautaElement");}
+                case "5" -> {actualizeaza();AuditService.logAction("actualizeaza");}
+                case "6" -> {adaugaEticheta();AuditService.logAction("adaugaEticheta");}
+                case "7" -> {vizualizareDupaEticheta();AuditService.logAction("vizualizareDupaEticheta");}
+                case "8" -> {sortareElemente();AuditService.logAction("sortareElemente");}
+                case "9" -> {adaugaAlbum();AuditService.logAction("adaugaAlbum");}
+                case "10" -> {adaugaElementAlbum();AuditService.logAction("adaugaElementAlbum");}
+                case "11" -> {stergeElementAlbum();AuditService.logAction("stergeElementAlbum");}
+                case "12" -> {stergeAlbum();AuditService.logAction("stergeAlbum");}
+                case "13" -> {vizualizareElemAlbum();AuditService.logAction("vizualizareElemAlbum");}
+                case "14" -> {filtrareElemente();AuditService.logAction("filtrareElemente");}
                 case "0" -> {
                     scanner.close();
                     exit = true;
@@ -116,10 +112,7 @@ public class Main {
     private static void afiseazaElemente() {
         List<Element> elements = serviciuGalerie.viewAllElements();
         if (!elements.isEmpty()) {
-            for (Element element : elements) {
-                System.out.println(element);
-                System.out.println();
-            }
+            elements.forEach(System.out::println);
         } else {
             System.out.println("Nu exista elemente in galerie!");
         }
@@ -127,7 +120,7 @@ public class Main {
     }
 
     // 2
-    private static void adaugaElement() {
+    private static void adaugaElement() throws SQLException {
         System.out.println("Introduceti numele:");
         String nume = scanner.nextLine().trim();
         System.out.println("Introduceti descrierea:");
@@ -137,8 +130,8 @@ public class Main {
         while (data == null) {
             data = serviciuGalerie.readLocalData(scanner.nextLine());
         }
-        System.out.println("Introduceti marimea:");
-        int marime = scanner.nextInt();
+        System.out.println("Introduceti dimensiunea:");
+        int dimensiune = scanner.nextInt();
         scanner.nextLine(); // consuma newline
         boolean ok = true;
         while (ok) {
@@ -153,13 +146,13 @@ public class Main {
                 String tipCamera = scanner.nextLine().trim();
                 System.out.println("Introduceti setarile camerei:");
                 String setariCamera = scanner.nextLine().trim();
-                serviciuGalerie.addElement(nume, descriere, marime, tip, 0, data, resolutie, locatie, tipCamera, setariCamera);
+                serviciuGalerie.addElement(nume, descriere, dimensiune, tip, 0, data, resolutie, locatie, tipCamera, setariCamera);
                 ok = false;
             } else if (tip.equals("vid")) {
                 System.out.println("Introduceti durata(secunde un nr):");
                 int durata = scanner.nextInt();
                 scanner.nextLine(); // consuma newline
-                serviciuGalerie.addElement(nume, descriere, marime, tip, durata, data, "", "", "", "");
+                serviciuGalerie.addElement(nume, descriere, dimensiune, tip, durata, data, "", "", "", "");
                 ok = false;
             } else {
                 System.out.println("Tip invalid!");
@@ -174,10 +167,10 @@ public class Main {
         Element el = serviciuGalerie.viewElement(nume);
         if (el != null) {
             serviciuGalerie.removeElement(nume);
-            System.out.println("Elementul stearsa cu succes.");
+            System.out.println("Elementul stears cu succes.");
             System.out.println();
         } else {
-            System.out.println("Elementul nu a fost gasita.");
+            System.out.println("Elementul nu a fost gasit.");
             System.out.println();
         }
     }
@@ -237,7 +230,7 @@ public class Main {
     // 8
     private static void sortareElemente() {
         System.out.println("1. Sortare dupa nume");
-        System.out.println("2. Sortare dupa marime");
+        System.out.println("2. Sortare dupa dimensiune");
         System.out.println("3. Sortare dupa data");
         int optiuneSortare = scanner.nextInt();
         scanner.nextLine(); // consuma newline
@@ -297,19 +290,16 @@ public class Main {
     }
 
     //14
-    private static void filtrareDupaData() {
-        System.out.println("Introduceti operatia (nume/marime/data):");
+    private static void filtrareElemente() {
+        System.out.println("Introduceti operatia (nume/dimensiune/data/eticheta):");
         String tip = scanner.nextLine().trim();
         switch (tip) {
             case "nume" -> {
                 System.out.println("Introduceti numle:");
                 String nume = scanner.nextLine().trim();
-                List<Element> elDupaData = Filtru.filtrareDupaNume(serviciuGalerie.viewAllElements(), nume);
-                if (!elDupaData.isEmpty()) {
-                    System.out.println("Imagini dupa nume:");
-                    for (Element el : elDupaData) {
-                        System.out.println(el);
-                    }
+                List<Element> elDupaNume = Filtru.filtrareDupaNume(serviciuGalerie.viewAllElements(), nume);
+                if (!elDupaNume.isEmpty()) {
+                    elDupaNume.forEach(System.out::println);
                 } else {
                     System.out.println("Nu exista elemente!");
                 }
@@ -327,26 +317,34 @@ public class Main {
                 List<Element> elDupaData = Filtru.filtrareDupaData(serviciuGalerie.viewAllElements(), data, data2);
                 if (!elDupaData.isEmpty()) {
                     System.out.println("Imagini dupa data:");
-                    for (Element el : elDupaData) {
-                        System.out.println(el);
-                    }
+                    elDupaData.forEach(System.out::println);
                 } else {
                     System.out.println("Nu exista elemente!");
                 }
             }
-            case "marime" -> {
+            case "dimensiune" -> {
                 System.out.println("Introduceti dimensiunea minima(nr Intreg):");
                 int dimmin = scanner.nextInt();
                 scanner.nextLine();
                 System.out.println("Introduceti dimensiunea maxima(nr intreg):");
                 int dimmax = scanner.nextInt();
                 scanner.nextLine();
-                List<Element> elDupaData = Filtru.filtrareDupaDimensiune(serviciuGalerie.viewAllElements(), dimmin, dimmax);
-                if (!elDupaData.isEmpty()) {
+                List<Element> elDupaDimensiune = Filtru.filtrareDupaDimensiune(serviciuGalerie.viewAllElements(), dimmin, dimmax);
+                if (!elDupaDimensiune.isEmpty()) {
                     System.out.println("Imagini dupa dimensiune:");
-                    for (Element el : elDupaData) {
-                        System.out.println(el);
-                    }
+                    elDupaDimensiune.forEach(System.out::println);
+                } else {
+                    System.out.println("Nu exista elemente!");
+                }
+            }
+            case "eticheta"->{
+                System.out.print("Introduceti eticheta dupa care doriti sa filtrati elementele: ");
+                String eticheta = scanner.nextLine();
+
+                List<Element> elDupaEticheta = Filtru.filtrareDupaEticheta(serviciuGalerie.viewAllElements(),new Eticheta(eticheta));
+                if (!elDupaEticheta.isEmpty()) {
+                    System.out.println("Elemente cu eticheta " + eticheta + ":");
+                    elDupaEticheta.forEach(System.out::println);
                 } else {
                     System.out.println("Nu exista elemente!");
                 }
