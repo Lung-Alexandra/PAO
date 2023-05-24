@@ -8,13 +8,13 @@ import java.time.format.DateTimeFormatter;
 
 public class JdbcClass {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/galeriedefotografi";
- 
+    
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public JdbcClass() {
     }
 
-    public static int getLastElementId() throws SQLException {
+    public static int getLastId(String tableName) throws SQLException {
         int lastElementId = 0;
 
         try {
@@ -22,7 +22,7 @@ public class JdbcClass {
             Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             // Obținerea ultimului id din tabela Element
-            String sql = "SELECT MAX(id) FROM Element";
+            String sql = "SELECT MAX(id) FROM "+ tableName;
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
@@ -32,6 +32,8 @@ public class JdbcClass {
             }
 
             // Închiderea conexiunii JDBC
+            resultSet.close();
+            statement.close();
             connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -51,7 +53,7 @@ public class JdbcClass {
 
 
             // Obținerea ultimului ID
-            int lastId = getLastElementId() + 1;
+            int lastId = getLastId("Element") + 1;
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, String.valueOf(lastId));
             statement.setString(2, element.getName());
@@ -78,7 +80,7 @@ public class JdbcClass {
             Element el = new Element(imagine.getName(), imagine.getDescription(), imagine.getSize(), imagine.getCreationDate());
             insertElement(el);
 
-            int lastId = getLastElementId();
+            int lastId = getLastId("Element");
             // Inserting the Imagine with the last inserted id
             String imagineInsertSql = "INSERT INTO Imagine (id, resolution, location) VALUES (?, ?, ?)";
             PreparedStatement imagineInsertStatement = connection.prepareStatement(imagineInsertSql);
@@ -103,7 +105,7 @@ public class JdbcClass {
             Imagine el = new Imagine(fotografie.getName(), fotografie.getDescription(), fotografie.getSize(), fotografie.getCreationDate(), fotografie.getResolution(), fotografie.getLocation());
             insertImagine(el);
 
-            int lastId = getLastElementId();
+            int lastId = getLastId("Element");
             // Inserting the Fotografie with the last inserted id
             String fotografieInsertSql = "INSERT INTO Fotografie (id, cameraType, cameraSettings) VALUES (?, ?, ?)";
             PreparedStatement fotografieInsertStatement = connection.prepareStatement(fotografieInsertSql);
@@ -128,7 +130,7 @@ public class JdbcClass {
             Element el = new Element(videoclip.getName(), videoclip.getDescription(), videoclip.getSize(), videoclip.getCreationDate());
             insertElement(el);
 
-            int lastId = getLastElementId();
+            int lastId = getLastId("Element");
             // Inserting the Videoclip with the last inserted id
             String videoclipInsertSql = "INSERT INTO Videoclip (id, duration) VALUES (?, ?)";
             PreparedStatement videoclipInsertStatement = connection.prepareStatement(videoclipInsertSql);
@@ -136,6 +138,53 @@ public class JdbcClass {
             videoclipInsertStatement.setInt(2, videoclip.getDuration());
             videoclipInsertStatement.executeUpdate();
             videoclipInsertStatement.close();
+
+            // Închiderea conexiunii JDBC
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void insertAlbum(Album album) throws SQLException {
+        try {
+            // Configurarea conexiunii JDBC
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
+            // Exemplu de inserare a unui album în baza de date
+            String sql = "INSERT INTO Album (id, nume) VALUES (?, ?)";
+
+            // Obținerea ultimului ID
+            int lastId = getLastId("Album") + 1;
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, lastId);
+            statement.setString(2, album.getNume());
+            statement.executeUpdate();
+            statement.close();
+
+            // Închiderea conexiunii JDBC
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void insertEticheta(Eticheta eticheta) throws SQLException {
+        try {
+            // Configurarea conexiunii JDBC
+            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
+            // Exemplu de inserare a unei etichete în baza de date
+            String sql = "INSERT INTO Eticheta (id, nume) VALUES (?, ?)";
+
+            // Obținerea ultimului ID
+            int lastId = getLastId("Eticheta") + 1;
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, lastId);
+            statement.setString(2, eticheta.getNume());
+            statement.executeUpdate();
+            statement.close();
 
             // Închiderea conexiunii JDBC
             connection.close();
