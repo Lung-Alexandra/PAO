@@ -14,17 +14,14 @@ public class ServiciuGalerie {
     private Map<String, Eticheta> tags = new HashMap<>();
     private List<Album> albums = new ArrayList<>();
 
-    public ServiciuGalerie() throws SQLException {
+    public ServiciuGalerie() {
         this.elements = JdbcClass.readElements();
+//        this.albums = JdbcClass.readAlbums();
     }
-
-    public ServiciuGalerie( Map<String, Eticheta> tags, List<Album> albums) {
-        this.tags = tags;
-        this.albums = albums;
-    }
+    
 
     // Adaugarea unei noi imagini/videoclip in galerie
-    public void addElement(String name, String description, int size, String type, int duration, LocalDate dataCreare, String resolutie, String locatie, String tipcamera, String setaricamera) throws SQLException {
+    public void addElement(String name, String description, int size, String type, int duration, LocalDate dataCreare, String resolutie, String locatie, String tipcamera, String setaricamera) {
         Element element = null;
         if (type.equals("vid")) {
             element = new Videoclip(name, description, size, dataCreare, duration);
@@ -209,9 +206,14 @@ public class ServiciuGalerie {
     // Crearea unui album de imagini/videoclipuri
     public void createAlbum(String albumName) {
         AuditService.logAction("createAlbum");
+        JdbcClass.insertAlbum(new Album(albumName));
         albums.add(new Album(albumName));
     }
 
+    public List<Album> viewAllAlbums() {
+        AuditService.logAction("viewAllAlbums");
+        return new ArrayList<>(albums);
+    }
     public void deleteAlbum(String albumName) {
         Album al = getAlbumByName(albumName);
         if (al == null)

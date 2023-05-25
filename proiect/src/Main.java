@@ -19,15 +19,8 @@ public class Main {
     static Map<String, Element> elements = new HashMap<>();
     static Map<String, Eticheta> tags = new HashMap<>();
     static List<Album> albums = new ArrayList<>();
-    private static final ServiciuGalerie serviciuGalerie;
+    private static final ServiciuGalerie serviciuGalerie = new ServiciuGalerie();
 
-    static {
-        try {
-            serviciuGalerie = new ServiciuGalerie();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public static void init() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -80,7 +73,8 @@ public class Main {
                 case "11" -> {stergeElementAlbum();AuditService.logAction("stergeElementAlbum");}
                 case "12" -> {stergeAlbum();AuditService.logAction("stergeAlbum");}
                 case "13" -> {vizualizareElemAlbum();AuditService.logAction("vizualizareElemAlbum");}
-                case "14" -> {filtrareElemente();AuditService.logAction("filtrareElemente");}
+                case "14" -> {afiseazaAlbume();AuditService.logAction("afiseazaAlbume");}
+                case "15" -> {filtrareElemente();AuditService.logAction("filtrareElemente");}
                 case "0" -> {
                     scanner.close();
                     exit = true;
@@ -109,7 +103,8 @@ public class Main {
         System.out.println("11. Stergere element din album");
         System.out.println("12. Stergere album");
         System.out.println("13. Vizualizare elemente album");
-        System.out.println("14. Filtrare imagini/videoclipuri dupa diferite criterii");
+        System.out.println("14. Vizualizare toate albumele");
+        System.out.println("15. Filtrare imagini/videoclipuri dupa diferite criterii");
 
         System.out.println("0. Iesire");
         System.out.print("Alegerea dumneavoastra: ");
@@ -127,8 +122,9 @@ public class Main {
         System.out.println();
     }
 
+
     // 2
-    private static void adaugaElement() throws SQLException {
+    private static void adaugaElement() {
         System.out.println("Introduceti numele:");
         String nume = scanner.nextLine().trim();
         System.out.println("Introduceti descrierea:");
@@ -298,6 +294,17 @@ public class Main {
     }
 
     //14
+    private static void afiseazaAlbume() {
+        List<Album> albume = serviciuGalerie.viewAllAlbums();
+        if (!albume.isEmpty()) {
+            albume.forEach(System.out::println);
+        } else {
+            System.out.println("Nu exista albume in galerie!");
+        }
+        System.out.println();
+    }
+
+    //15
     private static void filtrareElemente() {
         System.out.println("Introduceti operatia (nume/dimensiune/data/eticheta):");
         String tip = scanner.nextLine().trim();
