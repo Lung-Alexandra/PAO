@@ -83,11 +83,11 @@ public class Element implements Comparator<Element> {
 
     @Override
     public String toString() {
-        return "name=" + name + '\n' +
-                "description=" + description  +
-                "\nsize=" + size +
-                "\ncreationDate=" + formatter.format(creationDate) +
-                "\netichete=" + etichete;
+        return "   name = " + name + '\n' +
+                "   description = " + description  +
+                "\n   size = " + size +
+                "\n   creationDate = " + formatter.format(creationDate) +
+                "\n   etichete = " + etichete;
     }
 }
 

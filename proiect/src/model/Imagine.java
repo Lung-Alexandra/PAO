@@ -30,9 +30,8 @@ public class Imagine extends Element {
 
     @Override
     public String toString() {
-        return "Imagine {\n" + super.toString()+
-                "\nresolution=" + resolution +
-                "\nlocation=" + location +
-                "\n}";
+        return  super.toString()+
+                "\n   resolution = " + resolution +
+                "\n   location = " + location;
     }
 }

@@ -1,81 +1,80 @@
-drop table  if exists  fotografie;
-drop table  if exists  imagine;
-drop table  if exists  videoclip;
-drop table  if exists  elementalbum;
-drop table  if exists  elementeticheta;
-drop table  if exists  element;
-drop table  if exists  album;
-drop table  if exists  eticheta;
+drop table if exists fotografie;
+drop table if exists imagine;
+drop table if exists videoclip;
+drop table if exists element_eticheta;
+drop table if exists album_element;
+drop table if exists element;
+drop table if exists album;
+drop table if exists eticheta;
 
 
-
--- Tabela de bază 'Element'
+-- Tabela Element
 CREATE TABLE Element
 (
-    id           INT PRIMARY KEY AUTO_INCREMENT,
+    id           INT AUTO_INCREMENT PRIMARY KEY,
     name         VARCHAR(255) NOT NULL,
     description  VARCHAR(255),
-    size         INT,
-    creationDate DATE
+    size         INT          NOT NULL,
+    creationDate DATE         NOT NULL
 );
 
--- Tabela 'Imagine' care moștenește 'Element'
+-- Tabela Imagine
 CREATE TABLE Imagine
 (
-    id         INT PRIMARY KEY,
-    resolution VARCHAR(50),
-    location   VARCHAR(100),
-    FOREIGN KEY (id) REFERENCES Element (id)
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    element_id     INT,
+    resolution     VARCHAR(255),
+    location       VARCHAR(255),
+    FOREIGN KEY (element_id) REFERENCES Element (id)
 );
 
--- Tabela 'Fotografie' care moștenește 'Imagine'
+-- Tabela Fotografie
 CREATE TABLE Fotografie
 (
-    id             INT PRIMARY KEY,
-    cameraType     VARCHAR(50),
-    cameraSettings VARCHAR(100),
-    FOREIGN KEY (id) REFERENCES Imagine (id)
+    id             INT AUTO_INCREMENT PRIMARY KEY,
+    imagine_id     INT,
+    cameraType     VARCHAR(255),
+    cameraSettings VARCHAR(255),
+    FOREIGN KEY (imagine_id) REFERENCES Imagine (id)
 );
 
--- Tabela 'Videoclip' care moștenește 'Element'
+-- Tabela Videoclip
 CREATE TABLE Videoclip
 (
-    id       INT PRIMARY KEY,
-    duration INT,
-    FOREIGN KEY (id) REFERENCES Element (id)
+    id         INT AUTO_INCREMENT PRIMARY KEY,
+    element_id INT,
+    duration   INT,
+    FOREIGN KEY (element_id) REFERENCES Element (id)
 );
 
--- Tabela 'Album'
+-- Tabela Album
 CREATE TABLE Album
 (
-    id   INT PRIMARY KEY AUTO_INCREMENT,
+    id   INT AUTO_INCREMENT PRIMARY KEY,
     nume VARCHAR(255) NOT NULL
 );
 
--- Tabela 'Eticheta'
+-- Tabela pentru asocierea elementelor cu albumele
+CREATE TABLE Album_Element
+(
+    album_id   INT,
+    element_id INT,
+    FOREIGN KEY (album_id) REFERENCES Album (id),
+    FOREIGN KEY (element_id) REFERENCES Element (id)
+);
+
+-- Tabela Eticheta
 CREATE TABLE Eticheta
 (
-    id   INT PRIMARY KEY AUTO_INCREMENT,
+    id   INT AUTO_INCREMENT PRIMARY KEY,
     nume VARCHAR(255) NOT NULL
 );
 
--- Tabela de legătură între 'Element' și 'Eticheta' (Many-to-Many relationship)
-CREATE TABLE ElementEticheta
+-- Tabela pentru asocierea elementelor cu etichetele
+CREATE TABLE Element_Eticheta
 (
-    elementId  INT,
-    etichetaId INT,
-    FOREIGN KEY (elementId) REFERENCES Element (id),
-    FOREIGN KEY (etichetaId) REFERENCES Eticheta (id)
+    element_id  INT,
+    eticheta_id INT,
+    FOREIGN KEY (element_id) REFERENCES Element (id),
+    FOREIGN KEY (eticheta_id) REFERENCES Eticheta (id)
 );
-
--- Tabela de legătură între 'Element' și 'Album' (Many-to-Many relationship)
-CREATE TABLE ElementAlbum
-(
-    elementId INT,
-    albumId   INT,
-    FOREIGN KEY (elementId) REFERENCES Element (id),
-    FOREIGN KEY (albumId) REFERENCES Album (id)
-);
-
-select * from Element;
-select * from Imagine;

@@ -21,9 +21,9 @@ public class Videoclip extends Element {
 
     @Override
     public String toString() {
-        return "Videoclip {\n" + super.toString()+
-                "\nduration=" + duration +
-                "\n}";
+        return "Videoclip \n" + super.toString()+
+                "\n   duration = " + duration +
+                "\n";
     }
 }
 

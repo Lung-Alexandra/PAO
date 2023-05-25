@@ -19,7 +19,15 @@ public class Main {
     static Map<String, Element> elements = new HashMap<>();
     static Map<String, Eticheta> tags = new HashMap<>();
     static List<Album> albums = new ArrayList<>();
-    private static final ServiciuGalerie serviciuGalerie = new ServiciuGalerie(elements, tags, albums);
+    private static final ServiciuGalerie serviciuGalerie;
+
+    static {
+        try {
+            serviciuGalerie = new ServiciuGalerie();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static void init() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

@@ -14,11 +14,11 @@ public class ServiciuGalerie {
     private Map<String, Eticheta> tags = new HashMap<>();
     private List<Album> albums = new ArrayList<>();
 
-    public ServiciuGalerie() {
+    public ServiciuGalerie() throws SQLException {
+        this.elements = JdbcClass.readElements();
     }
 
-    public ServiciuGalerie(Map<String, Element> elements, Map<String, Eticheta> tags, List<Album> albums) {
-        this.elements = elements;
+    public ServiciuGalerie( Map<String, Eticheta> tags, List<Album> albums) {
         this.tags = tags;
         this.albums = albums;
     }

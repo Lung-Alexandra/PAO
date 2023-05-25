@@ -34,9 +34,9 @@ public class Fotografie extends Imagine {
 
     @Override
     public String toString() {
-        return "Fotografie {\n" + super.toString()+
-                "\ncameraType=" + cameraType +
-                "\ncameraSettings=" + cameraSettings +
-                "\n}";
+        return "Fotografie \n" + super.toString()+
+                "\n   cameraType = " + cameraType +
+                "\n   cameraSettings = " + cameraSettings +
+                "\n";
     }
 }
