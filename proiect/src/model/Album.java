@@ -5,44 +5,44 @@ import java.util.List;
 import java.util.Objects;
 
 public class Album {
-    private String nume;
-    private List<Element> elemente;
+    private String name;
+    private List<Element> albumElements;
 
-    public Album(String nume) {
-        this.nume = nume;
-        this.elemente = new ArrayList<>();
+    public Album(String name) {
+        this.name = name;
+        this.albumElements = new ArrayList<>();
     }
 
-    public String getNume() {
-        return nume;
+    public String getName() {
+        return name;
     }
 
-    public void adaugaElement(Element element) {
-        elemente.add(element);
+    public void addElementToAlbum(Element element) {
+        albumElements.add(element);
     }
 
-    public void setNume(String nume) {
-        this.nume = nume;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setElemente(List<Element> elemente) {
-        this.elemente = elemente;
+    public void setAlbumElements(List<Element> albumElements) {
+        this.albumElements = albumElements;
     }
 
-    public List<Element> getElemente() {
-        return elemente;
+    public List<Element> getAlbumElements() {
+        return albumElements;
     }
 
     public void removeElement(String elementName) {
         Element elementToRemove = null;
-        for (Element element : elemente) {
+        for (Element element : albumElements) {
             if (element.getName().equals(elementName)) {
                 elementToRemove = element;
                 break;
             }
         }
         if (elementToRemove != null) {
-            elemente.remove(elementToRemove);
+            albumElements.remove(elementToRemove);
         }
     }
 
@@ -51,18 +51,16 @@ public class Album {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Album album = (Album) o;
-        return Objects.equals(nume, album.nume) && Objects.equals(elemente, album.elemente);
+        return Objects.equals(name, album.name) && Objects.equals(albumElements, album.albumElements);
     }
 
     @Override
     public String toString() {
-        return "Album{" +
-                "\nnume=" + nume  +
-                "\nelemente=" + elemente +
-                "\n}";
+        return "Album" +
+                "\n   nume = " + name +
+                "\n   elemente = " + albumElements +
+                "\n";
     }
 
-    public void addElement(Element element) {
-        elemente.add(element);
-    }
+
 }

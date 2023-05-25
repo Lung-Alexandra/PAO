@@ -1,6 +1,5 @@
 package service;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -10,15 +9,16 @@ import model.*;
 
 
 public class ServiciuGalerie {
-    private Map<String, Element> elements = new HashMap<>();
-    private Map<String, Eticheta> tags = new HashMap<>();
-    private List<Album> albums = new ArrayList<>();
+    private final Map<String, Element> elements;
+    private final Map<String, Eticheta> tags = new HashMap<>();
+    private final List<Album> albums;
 
     public ServiciuGalerie() {
         this.elements = JdbcClass.readElements();
-//        this.albums = JdbcClass.readAlbums();
+        this.albums = JdbcClass.readAlbums();
+//        this.tags = JdbcClass.readElement();
     }
-    
+
 
     // Adaugarea unei noi imagini/videoclip in galerie
     public void addElement(String name, String description, int size, String type, int duration, LocalDate dataCreare, String resolutie, String locatie, String tipcamera, String setaricamera) {
@@ -72,7 +72,7 @@ public class ServiciuGalerie {
             //pentru a evita verificarea manuală a
             // existenței etichetei înainte de a o
             // adăuga în map
-            tags.putIfAbsent(et.getNume(), et);
+            tags.putIfAbsent(et.getName(), et);
             if (el.contineEticheta(et)) {
                 System.out.println("Eticheta deja existenta la element.");
             } else {
@@ -138,7 +138,8 @@ public class ServiciuGalerie {
         if (album != null) {
             Element element = elements.get(elementName);
             if (element != null) {
-                album.addElement(element);
+                album.addElementToAlbum(element);
+                JdbcClass.insertAlbumElement(album,element);
             } else {
                 System.out.println("Elementul nu exista!");
             }
@@ -168,7 +169,7 @@ public class ServiciuGalerie {
     public void viewAlbumContent(String albumName) {
         Album album = getAlbumByName(albumName);
         if (album != null) {
-            List<Element> elementeAlbum = album.getElemente();
+            List<Element> elementeAlbum = album.getAlbumElements();
             if (!elementeAlbum.isEmpty()) {
                 System.out.println("Elementele din albumul " + albumName + " sunt: ");
                 for (Element element : elementeAlbum) {
@@ -195,7 +196,7 @@ public class ServiciuGalerie {
         AuditService.logAction("getAlbumByName");
 
         for (Album album : albums) {
-            if (album.getNume().equals(albumName)) {
+            if (album.getName().equals(albumName)) {
                 return album;
             }
         }

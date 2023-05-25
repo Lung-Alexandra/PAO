@@ -1,10 +1,8 @@
 import model.*;
-
 import service.AuditService;
 import service.ServiciuGalerie;
 import util.Filtru;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -43,15 +41,15 @@ public class Main {
         albums.add(album1);
         albums.add(album2);
 
-        album1.addElement(foto1);
-        album1.addElement(foto);
-        album1.addElement(foto2);
-        album2.addElement(foto3);
-        album2.addElement(vid1);
-        album2.addElement(vid2);
+        album1.addElementToAlbum(foto1);
+        album1.addElementToAlbum(foto);
+        album1.addElementToAlbum(foto2);
+        album2.addElementToAlbum(foto3);
+        album2.addElementToAlbum(vid1);
+        album2.addElementToAlbum(vid2);
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) {
         //for testing
         init();
 

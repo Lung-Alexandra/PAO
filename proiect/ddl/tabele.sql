@@ -51,7 +51,7 @@ CREATE TABLE Videoclip
 CREATE TABLE Album
 (
     id   INT AUTO_INCREMENT PRIMARY KEY,
-    nume VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL
 );
 
 -- Tabela pentru asocierea elementelor cu albumele
@@ -67,7 +67,7 @@ CREATE TABLE Album_Element
 CREATE TABLE Eticheta
 (
     id   INT AUTO_INCREMENT PRIMARY KEY,
-    nume VARCHAR(255) NOT NULL
+    name VARCHAR(255) NOT NULL
 );
 
 -- Tabela pentru asocierea elementelor cu etichetele

@@ -1,31 +1,51 @@
 package service;
 
+import dataBase.Db;
 import model.*;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class JdbcClass {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/galeriedefotografi";
 
-    static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final Db database = Db.getDatabase();
+    private static final Connection con = database.getConnection();
 
-    public JdbcClass() {
+    public static int getIDByNume(String tableName, String name) throws SQLException {
+        int id = 0;
+        try {
+            // Obținerea ultimului id din tabela Element
+            String sql = "SELECT * FROM " + tableName + " Where name = " + "\"" + name + "\"";
+            Statement statement = con.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            // Verificarea existenței unui rezultat
+            if (resultSet.next()) {
+                id = resultSet.getInt("id");
+            }
+
+
+            resultSet.close();
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return id;
     }
 
     public static int getLastId(String tableName) throws SQLException {
         int lastElementId = 0;
 
         try {
-            // Configurarea conexiunii JDBC
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
 
             // Obținerea ultimului id din tabela Element
             String sql = "SELECT MAX(id) FROM " + tableName;
-            Statement statement = connection.createStatement();
+            Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             // Verificarea existenței unui rezultat
@@ -33,10 +53,10 @@ public class JdbcClass {
                 lastElementId = resultSet.getInt(1);
             }
 
-            // Închiderea conexiunii JDBC
+
             resultSet.close();
             statement.close();
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -46,9 +66,6 @@ public class JdbcClass {
 
     public static void insertElement(Element element) throws SQLException {
         try {
-            // Configurarea conexiunii JDBC
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-
 
             // Exemplu de inserare a unui element în baza de date
             String sql = "INSERT INTO Element (id, name, description,size, creationDate) VALUES (?, ?, ?, ?, ?)";
@@ -56,7 +73,7 @@ public class JdbcClass {
 
             // Obținerea ultimului ID
             int lastId = getLastId("Element") + 1;
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1, String.valueOf(lastId));
             statement.setString(2, element.getName());
             statement.setString(3, element.getDescription());
@@ -66,8 +83,6 @@ public class JdbcClass {
             statement.close();
 
 
-            // Închiderea conexiunii JDBC
-            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -76,8 +91,6 @@ public class JdbcClass {
 
     public static void insertImagine(Imagine imagine) throws SQLException {
         try {
-            // Configuring the JDBC connection
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
 
             Element el = new Element(imagine.getName(), imagine.getDescription(), imagine.getSize(), imagine.getCreationDate());
             insertElement(el);
@@ -85,7 +98,7 @@ public class JdbcClass {
             int lastId = getLastId("Imagine") + 1;
             // Inserting the Imagine with the last inserted id
             String imagineInsertSql = "INSERT INTO Imagine (id,element_id, resolution, location) VALUES (?,?, ?, ?)";
-            PreparedStatement imagineInsertStatement = connection.prepareStatement(imagineInsertSql);
+            PreparedStatement imagineInsertStatement = con.prepareStatement(imagineInsertSql);
             imagineInsertStatement.setInt(1, lastId);
             imagineInsertStatement.setInt(2, lastElementId);
             imagineInsertStatement.setString(3, imagine.getResolution());
@@ -93,17 +106,15 @@ public class JdbcClass {
             imagineInsertStatement.executeUpdate();
             imagineInsertStatement.close();
 
-            // Closing the JDBC connection
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void insertFotografie(Fotografie fotografie) throws SQLException {
+    public static void insertFotografie(Fotografie fotografie) {
         try {
-            // Configurarea conexiunii JDBC
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
 
             Imagine el = new Imagine(fotografie.getName(), fotografie.getDescription(), fotografie.getSize(), fotografie.getCreationDate(), fotografie.getResolution(), fotografie.getLocation());
             insertImagine(el);
@@ -111,7 +122,7 @@ public class JdbcClass {
             int lastId = getLastId("Fotografie") + 1;
             // Inserting the Fotografie with the last inserted id
             String fotografieInsertSql = "INSERT INTO Fotografie (id,imagine_id, cameraType, cameraSettings) VALUES (?, ?,?, ?)";
-            PreparedStatement fotografieInsertStatement = connection.prepareStatement(fotografieInsertSql);
+            PreparedStatement fotografieInsertStatement = con.prepareStatement(fotografieInsertSql);
             fotografieInsertStatement.setInt(1, lastId);
             fotografieInsertStatement.setInt(2, lastElementId);
             fotografieInsertStatement.setString(3, fotografie.getCameraType());
@@ -119,17 +130,15 @@ public class JdbcClass {
             fotografieInsertStatement.executeUpdate();
             fotografieInsertStatement.close();
 
-            // Închiderea conexiunii JDBC
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void insertVideoclip(Videoclip videoclip) throws SQLException {
+    public static void insertVideoclip(Videoclip videoclip) {
         try {
-            // Configurarea conexiunii JDBC
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
 
             Element el = new Element(videoclip.getName(), videoclip.getDescription(), videoclip.getSize(), videoclip.getCreationDate());
             insertElement(el);
@@ -138,132 +147,250 @@ public class JdbcClass {
             int lastId = getLastId("Imagine") + 1;
             // Inserting the Videoclip with the last inserted id
             String videoclipInsertSql = "INSERT INTO Videoclip (id,element_id, duration) VALUES (?,?, ?)";
-            PreparedStatement videoclipInsertStatement = connection.prepareStatement(videoclipInsertSql);
+            PreparedStatement videoclipInsertStatement = con.prepareStatement(videoclipInsertSql);
             videoclipInsertStatement.setInt(1, lastId);
             videoclipInsertStatement.setInt(2, lastElementId);
             videoclipInsertStatement.setInt(3, videoclip.getDuration());
             videoclipInsertStatement.executeUpdate();
             videoclipInsertStatement.close();
 
-            // Închiderea conexiunii JDBC
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void insertAlbum(Album album) throws SQLException {
+    public static void insertAlbum(Album album) {
         try {
-            // Configurarea conexiunii JDBC
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
 
             // Exemplu de inserare a unui album în baza de date
-            String sql = "INSERT INTO Album (id, nume) VALUES (?, ?)";
+            String sql = "INSERT INTO Album (id, name) VALUES (?, ?)";
 
             // Obținerea ultimului ID
             int lastId = getLastId("Album") + 1;
 
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, lastId);
-            statement.setString(2, album.getNume());
+            statement.setString(2, album.getName());
             statement.executeUpdate();
             statement.close();
 
-            // Închiderea conexiunii JDBC
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static void insertEticheta(Eticheta eticheta) throws SQLException {
+    public static void insertAlbumElement(Album al, Element el) {
         try {
-            // Configurarea conexiunii JDBC
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
+
+            // Exemplu de inserare a unui album în baza de date
+            String sql = "INSERT INTO album_element (album_id, element_id) VALUES (?, ?)";
+
+            // Obținerea ultimului ID
+            int alId = getIDByNume("Album", al.getName());
+            int elId = getIDByNume("Element", el.getName());
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, alId);
+            statement.setInt(2, elId);
+            statement.executeUpdate();
+            statement.close();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void insertEticheta(Eticheta eticheta) {
+        try {
+
 
             // Exemplu de inserare a unei etichete în baza de date
-            String sql = "INSERT INTO Eticheta (id, nume) VALUES (?, ?)";
+            String sql = "INSERT INTO Eticheta (id, name) VALUES (?, ?)";
 
             // Obținerea ultimului ID
             int lastId = getLastId("Eticheta") + 1;
 
-            PreparedStatement statement = connection.prepareStatement(sql);
+            PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, lastId);
-            statement.setString(2, eticheta.getNume());
+            statement.setString(2, eticheta.getName());
             statement.executeUpdate();
             statement.close();
 
-            // Închiderea conexiunii JDBC
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public static Map<String, Element> readElements() throws SQLException {
+    public static Element readElement(int id) throws SQLException {
+        // Interogarea pentru a citi elementele din baza de date
+        String sql = "SELECT * FROM Element where id = " + id;
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        if(resultSet.next()) {
+            String name = resultSet.getString("name");
+            String description = resultSet.getString("description");
+            int size = resultSet.getInt("size");
+            LocalDate creationDate = resultSet.getDate("creationDate").toLocalDate();
+
+
+            // Interogarea pentru a citi elementele din baza de date
+            String sqlImg = "SELECT * FROM Imagine where element_id = " + id;
+            Statement statementImg = con.createStatement();
+            ResultSet resultSetImg = statementImg.executeQuery(sqlImg);
+            if (resultSetImg.next()) {
+                int idimg = resultSetImg.getInt("id");
+                String resolution = resultSetImg.getString("resolution");
+                String location = resultSetImg.getString("location");
+
+                String sqlFoto = "SELECT * FROM Fotografie where imagine_id = " + idimg;
+                Statement statementfoto = con.createStatement();
+                ResultSet resultSetfoto = statementfoto.executeQuery(sqlFoto);
+
+                if (resultSetfoto.next()) {
+                    String cameraType = resultSetfoto.getString("cameraType");
+                    String cameraSettings = resultSetfoto.getString("cameraSettings");
+                    Element element = new Fotografie(name, description, size, creationDate, resolution, location, cameraType, cameraSettings);
+                    return element;
+                }
+
+
+            } else {
+                String sqlVid = "SELECT * FROM Videoclip where element_id = " + id;
+                Statement statementVid = con.createStatement();
+                ResultSet resultSetVid = statementVid.executeQuery(sqlVid);
+                if (resultSetVid.next()) {
+                    int duration = resultSetVid.getInt("duration");
+
+                    Element element = new Videoclip(name, description, size, creationDate, duration);
+                    return element;
+                }
+
+            }
+        }
+        return null;
+    }
+
+    public static Map<String, Element> readElements() {
         Map<String, Element> elements = new HashMap<>();
 
         try {
-            // Configurarea conexiunii JDBC
-            Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
 
             // Interogarea pentru a citi elementele din baza de date
             String sql = "SELECT * FROM Element";
-            Statement statement = connection.createStatement();
+            Statement statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
             // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                String description = resultSet.getString("description");
-                int size = resultSet.getInt("size");
-                LocalDate creationDate = resultSet.getDate("creationDate").toLocalDate();
-
-
-                // Interogarea pentru a citi elementele din baza de date
-                String sqlImg = "SELECT * FROM Imagine where element_id = " + id;
-                Statement statementImg = connection.createStatement();
-                ResultSet resultSetImg = statementImg.executeQuery(sqlImg);
-                if (resultSetImg.next()) {
-                    int idimg = resultSetImg.getInt("id");
-                    String resolution = resultSetImg.getString("resolution");
-                    String location = resultSetImg.getString("location");
-
-                    String sqlFoto = "SELECT * FROM Fotografie where imagine_id = " + idimg;
-                    Statement statementfoto = connection.createStatement();
-                    ResultSet resultSetfoto = statementfoto.executeQuery(sqlFoto);
-
-                    if (resultSetfoto.next()) {
-                        String cameraType = resultSetfoto.getString("cameraType");
-                        String cameraSettings = resultSetfoto.getString("cameraSettings");
-                        Element element = new Fotografie(name, description, size, creationDate, resolution, location, cameraType, cameraSettings);
-                        elements.put(element.getName(), element);
-                    }
-
-
-                }else {
-                    String sqlVid = "SELECT * FROM Videoclip where element_id = " + id;
-                    Statement statementVid = connection.createStatement();
-                    ResultSet resultSetVid = statementVid.executeQuery(sqlVid);
-                    if (resultSetVid.next()) {
-                        int duration = resultSetVid.getInt("duration");
-
-                        Element element = new Videoclip(name, description, size, creationDate,duration);
-                        elements.put(element.getName(), element);
-                    }
-
-                }
+                Element element = readElement(id);
+                if (element != null)
+                    elements.put(element.getName(), element);
             }
 
-            // Închiderea conexiunii JDBC
+
             resultSet.close();
             statement.close();
-            connection.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return elements;
     }
+
+    public static List<Album> readAlbums() {
+        List<Album> albume = new ArrayList<>();
+
+        try {
+
+
+            // Interogarea pentru a citi elementele din baza de date
+            String sql = "SELECT * FROM Album";
+            Statement statement = con.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
+            while (resultSet.next()) {
+                int idAlbum = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                Album al = new Album(name);
+
+                String sql1 = "SELECT * FROM album_element where album_id = " + idAlbum;
+                Statement statement1 = con.createStatement();
+                ResultSet resultSet1 = statement1.executeQuery(sql1);
+                while (resultSet1.next()) {
+                    int id_element = resultSet1.getInt("element_id");
+
+                    Element el = readElement(id_element);
+                    al.addElementToAlbum(el);
+                }
+                albume.add(al);
+
+
+            }
+
+
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return albume;
+    }
+//    public static  Map<String, Eticheta> readTags() {
+//        Map<String, Eticheta> tags = new HashMap<>();
+//
+//        try {
+//
+////
+//            // Interogarea pentru a citi elementele din baza de date
+//            String sql = "SELECT * FROM Album";
+//            Statement statement = con.createStatement();
+//            ResultSet resultSet = statement.executeQuery(sql);
+//
+//            // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
+//            while (resultSet.next()) {
+//                int idAlbum = resultSet.getInt("id");
+//                String name = resultSet.getString("name");
+//                Album al = new Album(name);
+//
+//                String sql1 = "SELECT * FROM album_element where album_id = " + idAlbum;
+//                Statement statement1 = con.createStatement();
+//                ResultSet resultSet1 = statement1.executeQuery(sql1);
+//                while (resultSet.next()) {
+//                    int id_element = resultSet1.getInt("element_id");
+//                    // Interogarea pentru a citi elementele din baza de date
+//                    String sqlel = "SELECT * FROM Element";
+//                    Statement statementel = con.createStatement();
+//                    ResultSet resultSetel = statementel.executeQuery(sqlel);
+//                    Element el = readElement(id_element, connection, resultSetel);
+//                    al.addElementToAlbum(el);
+//                }
+//                tags.add(al);
+//
+//
+//            }
+//
+//
+//            
+//            resultSet.close();
+//            statement.close();
+//            
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return albume;
+//    }
+
 }

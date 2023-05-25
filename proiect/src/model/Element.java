@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Date;
 
 public class Element implements Comparator<Element> {
     private String name;
@@ -12,7 +11,7 @@ public class Element implements Comparator<Element> {
     private int size;
     private LocalDate creationDate;
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private ArrayList<Eticheta> etichete;
+    private ArrayList<Eticheta> elementTags;
     public void setName(String name) {
         this.name = name;
     }
@@ -34,7 +33,7 @@ public class Element implements Comparator<Element> {
         this.description = description;
         this.size = size;
         this.creationDate = creationDate;
-        this.etichete = new ArrayList<>();
+        this.elementTags = new ArrayList<>();
     }
 
     public String getName() {
@@ -55,25 +54,25 @@ public class Element implements Comparator<Element> {
 
 
 
-    public ArrayList<Eticheta> getEtichete() {
-        return etichete;
+    public ArrayList<Eticheta> getElementTags() {
+        return elementTags;
     }
 
-    public void setEtichete(ArrayList<Eticheta> etichete) {
-        this.etichete = etichete;
+    public void setElementTags(ArrayList<Eticheta> elementTags) {
+        this.elementTags = elementTags;
     }
 
     public void adaugaEticheta(Eticheta eticheta) {
-        this.etichete.add(eticheta);
+        this.elementTags.add(eticheta);
     }
 
     public void stergeEticheta(Eticheta eticheta) {
-        this.etichete.remove(eticheta);
+        this.elementTags.remove(eticheta);
     }
 
 
     public boolean contineEticheta(Eticheta eticheta) {
-        return etichete.contains(eticheta);
+        return elementTags.contains(eticheta);
     }
 
     @Override
@@ -87,7 +86,7 @@ public class Element implements Comparator<Element> {
                 "   description = " + description  +
                 "\n   size = " + size +
                 "\n   creationDate = " + formatter.format(creationDate) +
-                "\n   etichete = " + etichete;
+                "\n   etichete = " + elementTags;
     }
 }
 

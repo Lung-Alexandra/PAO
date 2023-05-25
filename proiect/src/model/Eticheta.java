@@ -3,18 +3,18 @@ package model;
 import java.util.Objects;
 
 public class Eticheta {
-    private String nume;
+    private String name;
 
     public Eticheta(String nume) {
-        this.nume = nume;
+        this.name = nume;
     }
 
-    public String getNume() {
-        return nume;
+    public String getName() {
+        return name;
     }
 
-    public void setNume(String nume) {
-        this.nume = nume;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -22,12 +22,12 @@ public class Eticheta {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Eticheta eticheta = (Eticheta) o;
-        return Objects.equals(nume, eticheta.nume);
+        return Objects.equals(name, eticheta.name);
     }
 
 
     @Override
     public String toString() {
-        return "nume=" + nume ;
+        return "nume = " + name;
     }
 }
