@@ -232,7 +232,7 @@ public class JdbcClass {
         String sql = "SELECT * FROM Element where id = " + id;
         Statement statement = con.createStatement();
         ResultSet resultSet = statement.executeQuery(sql);
-        if(resultSet.next()) {
+        if (resultSet.next()) {
             String name = resultSet.getString("name");
             String description = resultSet.getString("description");
             int size = resultSet.getInt("size");
@@ -255,8 +255,7 @@ public class JdbcClass {
                 if (resultSetfoto.next()) {
                     String cameraType = resultSetfoto.getString("cameraType");
                     String cameraSettings = resultSetfoto.getString("cameraSettings");
-                    Element element = new Fotografie(name, description, size, creationDate, resolution, location, cameraType, cameraSettings);
-                    return element;
+                    return new Fotografie(name, description, size, creationDate, resolution, location, cameraType, cameraSettings);
                 }
 
 
@@ -267,8 +266,7 @@ public class JdbcClass {
                 if (resultSetVid.next()) {
                     int duration = resultSetVid.getInt("duration");
 
-                    Element element = new Videoclip(name, description, size, creationDate, duration);
-                    return element;
+                    return new Videoclip(name, description, size, creationDate, duration);
                 }
 
             }
@@ -280,8 +278,6 @@ public class JdbcClass {
         Map<String, Element> elements = new HashMap<>();
 
         try {
-
-
             // Interogarea pentru a citi elementele din baza de date
             String sql = "SELECT * FROM Element";
             Statement statement = con.createStatement();
@@ -311,7 +307,6 @@ public class JdbcClass {
 
         try {
 
-
             // Interogarea pentru a citi elementele din baza de date
             String sql = "SELECT * FROM Album";
             Statement statement = con.createStatement();
@@ -334,9 +329,7 @@ public class JdbcClass {
                 }
                 albume.add(al);
 
-
             }
-
 
             resultSet.close();
             statement.close();
@@ -347,50 +340,35 @@ public class JdbcClass {
 
         return albume;
     }
-//    public static  Map<String, Eticheta> readTags() {
-//        Map<String, Eticheta> tags = new HashMap<>();
-//
-//        try {
-//
-////
-//            // Interogarea pentru a citi elementele din baza de date
-//            String sql = "SELECT * FROM Album";
-//            Statement statement = con.createStatement();
-//            ResultSet resultSet = statement.executeQuery(sql);
-//
-//            // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
-//            while (resultSet.next()) {
-//                int idAlbum = resultSet.getInt("id");
-//                String name = resultSet.getString("name");
-//                Album al = new Album(name);
-//
-//                String sql1 = "SELECT * FROM album_element where album_id = " + idAlbum;
-//                Statement statement1 = con.createStatement();
-//                ResultSet resultSet1 = statement1.executeQuery(sql1);
-//                while (resultSet.next()) {
-//                    int id_element = resultSet1.getInt("element_id");
-//                    // Interogarea pentru a citi elementele din baza de date
-//                    String sqlel = "SELECT * FROM Element";
-//                    Statement statementel = con.createStatement();
-//                    ResultSet resultSetel = statementel.executeQuery(sqlel);
-//                    Element el = readElement(id_element, connection, resultSetel);
-//                    al.addElementToAlbum(el);
-//                }
-//                tags.add(al);
-//
-//
-//            }
-//
-//
-//            
-//            resultSet.close();
-//            statement.close();
-//            
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return albume;
-//    }
+
+    public static Map<String, Eticheta> readTags() {
+        Map<String, Eticheta> tags = new HashMap<>();
+
+        try {
+
+            // Interogarea pentru a citi elementele din baza de date
+            String sql = "SELECT * FROM eticheta";
+            Statement statement = con.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+
+                Eticheta et = new Eticheta(name);
+                tags.put(et.getName(), et);
+            }
+
+
+            resultSet.close();
+            statement.close();
+
+        } catch (
+                SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tags;
+    }
 
 }

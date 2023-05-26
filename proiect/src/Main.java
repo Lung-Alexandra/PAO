@@ -11,47 +11,46 @@ import java.util.*;
 public class Main {
 
     private static final Scanner scanner = new Scanner(System.in);
-//    private static final ServiciuGalerie serviciuGalerie = new ServiciuGalerie();
 
     // Date predefinite pentru testare
-    static Map<String, Element> elements = new HashMap<>();
-    static Map<String, Eticheta> tags = new HashMap<>();
-    static List<Album> albums = new ArrayList<>();
+//    static Map<String, Element> elements = new HashMap<>();
+//    static Map<String, Eticheta> tags = new HashMap<>();
+//    static List<Album> albums = new ArrayList<>();
     private static final ServiciuGalerie serviciuGalerie = new ServiciuGalerie();
 
-
-    public static void init() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        Fotografie foto = new Fotografie("img1", "desc", 200, LocalDate.parse("12/12/2000", formatter), "1900*240", null, "tipcam", "set");
-        Fotografie foto1 = new Fotografie("img2", "desc1", 500, LocalDate.parse("12/11/2000", formatter), "1900*240", null, "tipcam", "set");
-        Fotografie foto2 = new Fotografie("img3", "desc2", 100, LocalDate.parse("20/11/2000", formatter), "1900*240", null, "tipcam", "set");
-        Fotografie foto3 = new Fotografie("img4", "desc3", 700, LocalDate.parse("02/12/2000", formatter), "1900*240", null, "tipcam", "set");
-        Videoclip vid1 = new Videoclip("vid1", "desc3", 500, LocalDate.parse("05/12/2000", formatter), 1900);
-        Videoclip vid2 = new Videoclip("vid2", "desc3", 400, LocalDate.parse("03/12/2000", formatter), 1800);
-
-        Album album1 = new Album("Album1");
-        Album album2 = new Album("Album2");
-        elements.put(foto.getName(), foto);
-        elements.put(foto1.getName(), foto1);
-        elements.put(foto2.getName(), foto2);
-        elements.put(foto3.getName(), foto3);
-        elements.put(vid1.getName(), vid1);
-        elements.put(vid2.getName(), vid2);
-
-        albums.add(album1);
-        albums.add(album2);
-
-        album1.addElementToAlbum(foto1);
-        album1.addElementToAlbum(foto);
-        album1.addElementToAlbum(foto2);
-        album2.addElementToAlbum(foto3);
-        album2.addElementToAlbum(vid1);
-        album2.addElementToAlbum(vid2);
-    }
+//
+//    public static void init() {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//        Fotografie foto = new Fotografie("img1", "desc", 200, LocalDate.parse("12/12/2000", formatter), "1900*240", null, "tipcam", "set");
+//        Fotografie foto1 = new Fotografie("img2", "desc1", 500, LocalDate.parse("12/11/2000", formatter), "1900*240", null, "tipcam", "set");
+//        Fotografie foto2 = new Fotografie("img3", "desc2", 100, LocalDate.parse("20/11/2000", formatter), "1900*240", null, "tipcam", "set");
+//        Fotografie foto3 = new Fotografie("img4", "desc3", 700, LocalDate.parse("02/12/2000", formatter), "1900*240", null, "tipcam", "set");
+//        Videoclip vid1 = new Videoclip("vid1", "desc3", 500, LocalDate.parse("05/12/2000", formatter), 1900);
+//        Videoclip vid2 = new Videoclip("vid2", "desc3", 400, LocalDate.parse("03/12/2000", formatter), 1800);
+//
+//        Album album1 = new Album("Album1");
+//        Album album2 = new Album("Album2");
+//        elements.put(foto.getName(), foto);
+//        elements.put(foto1.getName(), foto1);
+//        elements.put(foto2.getName(), foto2);
+//        elements.put(foto3.getName(), foto3);
+//        elements.put(vid1.getName(), vid1);
+//        elements.put(vid2.getName(), vid2);
+//
+//        albums.add(album1);
+//        albums.add(album2);
+//
+//        album1.addElementToAlbum(foto1);
+//        album1.addElementToAlbum(foto);
+//        album1.addElementToAlbum(foto2);
+//        album2.addElementToAlbum(foto3);
+//        album2.addElementToAlbum(vid1);
+//        album2.addElementToAlbum(vid2);
+//    }
 
     public static void main(String[] args) {
         //for testing
-        init();
+//        init();
 
         boolean exit = false;
         while (!exit) {

@@ -10,13 +10,13 @@ import model.*;
 
 public class ServiciuGalerie {
     private final Map<String, Element> elements;
-    private final Map<String, Eticheta> tags = new HashMap<>();
+    private final Map<String, Eticheta> tags;
     private final List<Album> albums;
 
     public ServiciuGalerie() {
         this.elements = JdbcClass.readElements();
         this.albums = JdbcClass.readAlbums();
-//        this.tags = JdbcClass.readElement();
+        this.tags = JdbcClass.readTags();
     }
 
 
@@ -77,6 +77,7 @@ public class ServiciuGalerie {
                 System.out.println("Eticheta deja existenta la element.");
             } else {
                 el.adaugaEticheta(et);
+                JdbcClass.insertEticheta(et);
                 System.out.println("Eticheta adaugata cu succes.");
             }
         } else {
