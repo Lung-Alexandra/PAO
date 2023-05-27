@@ -6,6 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 import model.*;
+import exception.*;
 
 
 public class ServiciuGalerie {
@@ -38,8 +39,19 @@ public class ServiciuGalerie {
 
     // Stergerea unei imagini sau videoclip din galerie
     public void removeElement(String name) {
-        elements.remove(name);
-        AuditService.logAction("removeElement");
+        try {
+            Element el = elements.get(name);
+            if (el != null) {
+                elements.remove(name);
+                JdbcClass.deleteElement(el);
+                AuditService.logAction("removeElement");
+            } else {
+                throw new ElementNotFoundException("Elementul '" + name + "' nu a fost găsit.");
+            }
+        } catch (ElementNotFoundException e) {
+            System.out.println("Eroare: " + e.getMessage());
+            // Sau puteti face si alte actiuni de gestionare a exceptiei
+        }
     }
 
 
@@ -52,6 +64,7 @@ public class ServiciuGalerie {
             // Actualizăm cheia elementului
             element.setName(newName);
             element.setDescription(newDescription);
+            JdbcClass.updateElement(element);
             // Adăugăm elementul cu cheia nouă
             elements.put(newName, element);
         }
@@ -94,9 +107,10 @@ public class ServiciuGalerie {
             Eticheta et = new Eticheta(tag);
             if (el.contineEticheta(et)) {
                 el.stergeEticheta(et);
+                JdbcClass.deleteEtichetaElement(et);
                 System.out.println("Eticheta a fost stearsa cu succes.");
             } else {
-                System.out.println("Tag '" + tag + "' not found for element '" + name + "'.");
+                System.out.println("Eticheta '" + tag + "' nu a fost gasita pentru elementul '" + name + "'.");
             }
         } else {
             System.out.println("Elementul nu exista!");
@@ -158,6 +172,7 @@ public class ServiciuGalerie {
             Element element = elements.get(elementName);
             if (element != null) {
                 album.removeElement(elementName);
+                JdbcClass.deleteElementDinAlbum(elementName);
             } else {
                 System.out.println("Elementul nu exista!");
             }
@@ -221,10 +236,12 @@ public class ServiciuGalerie {
         Album al = getAlbumByName(albumName);
         if (al == null)
             System.out.println("Albumul nu a fost gasit.");
-
-        albums.remove(al);
-        System.out.println("Album sters cu succes.");
-        AuditService.logAction("deleteAlbum");
+        else {
+            albums.remove(al);
+            JdbcClass.deleteAlbum(al);
+            System.out.println("Album sters cu succes.");
+            AuditService.logAction("deleteAlbum");
+        }
     }
 
     //citire data

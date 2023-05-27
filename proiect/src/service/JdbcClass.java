@@ -20,8 +20,7 @@ public class JdbcClass {
         try {
             // Obținerea ultimului id din tabela Element
             String sql = "SELECT * FROM " + tableName + " Where name = " + "\"" + name + "\"";
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
             // Verificarea existenței unui rezultat
             if (resultSet.next()) {
@@ -30,7 +29,6 @@ public class JdbcClass {
 
 
             resultSet.close();
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -45,8 +43,8 @@ public class JdbcClass {
 
             // Obținerea ultimului id din tabela Element
             String sql = "SELECT MAX(id) FROM " + tableName;
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+
+            ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
             // Verificarea existenței unui rezultat
             if (resultSet.next()) {
@@ -55,13 +53,42 @@ public class JdbcClass {
 
 
             resultSet.close();
-            statement.close();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return lastElementId;
+    }
+
+    public static void updateElement(Element element)  {
+
+        try{
+            int idElement = getIDByNume("Element",element.getName());
+            String sql = "UPDATE Element SET name = ?, description = ? WHERE id = "+idElement;
+            PreparedStatement pstmt =  QueryExecutor.executeUpdate(sql);
+            pstmt.setString(1, element.getName());
+            pstmt.setString(2, element.getDescription());
+            pstmt.executeUpdate();
+            pstmt.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void updateImagine(Element element)  {
+
+        try{
+            int idElement = getIDByNume("Element",element.getName());
+            String sql = "UPDATE Element SET name = ?, description = ? WHERE id = "+idElement;
+            PreparedStatement pstmt =  QueryExecutor.executeUpdate(sql);
+            pstmt.setString(1, element.getName());
+            pstmt.setString(2, element.getDescription());
+            pstmt.executeUpdate();
+            pstmt.close();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void insertElement(Element element) throws SQLException {
@@ -252,8 +279,8 @@ public class JdbcClass {
     public static Element readElement(int id) throws SQLException {
         // Interogarea pentru a citi elementele din baza de date
         String sql = "SELECT * FROM Element where id = " + id;
-        Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
+
+        ResultSet resultSet = QueryExecutor.executeQuery(sql);
         if (resultSet.next()) {
             String name = resultSet.getString("name");
             String description = resultSet.getString("description");
@@ -263,16 +290,15 @@ public class JdbcClass {
 
             // Interogarea pentru a citi elementele din baza de date
             String sqlImg = "SELECT * FROM Imagine where element_id = " + id;
-            Statement statementImg = con.createStatement();
-            ResultSet resultSetImg = statementImg.executeQuery(sqlImg);
+
+            ResultSet resultSetImg = QueryExecutor.executeQuery(sqlImg);
             if (resultSetImg.next()) {
                 int idimg = resultSetImg.getInt("id");
                 String resolution = resultSetImg.getString("resolution");
                 String location = resultSetImg.getString("location");
 
                 String sqlFoto = "SELECT * FROM Fotografie where imagine_id = " + idimg;
-                Statement statementfoto = con.createStatement();
-                ResultSet resultSetfoto = statementfoto.executeQuery(sqlFoto);
+                ResultSet resultSetfoto = QueryExecutor.executeQuery(sqlFoto);
 
                 if (resultSetfoto.next()) {
                     String cameraType = resultSetfoto.getString("cameraType");
@@ -286,8 +312,7 @@ public class JdbcClass {
 
             } else {
                 String sqlVid = "SELECT * FROM Videoclip where element_id = " + id;
-                Statement statementVid = con.createStatement();
-                ResultSet resultSetVid = statementVid.executeQuery(sqlVid);
+                ResultSet resultSetVid = QueryExecutor.executeQuery(sqlVid);
                 if (resultSetVid.next()) {
                     int duration = resultSetVid.getInt("duration");
 
@@ -305,8 +330,7 @@ public class JdbcClass {
     private static Eticheta readTag(int idEticheta) throws SQLException {
         // Interogarea pentru a citi elementele din baza de date
         String sql = "SELECT * FROM eticheta where id = " + idEticheta;
-        Statement statement = con.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSet resultSet = QueryExecutor.executeQuery(sql);
         if (resultSet.next()) {
             String name = resultSet.getString("name");
             return new Eticheta(name);
@@ -316,8 +340,7 @@ public class JdbcClass {
 
     private static void readTags(Element el, int id) throws SQLException {
         String sql1 = "SELECT * FROM element_eticheta where element_id = " + id;
-        Statement statement1 = con.createStatement();
-        ResultSet resultSet1 = statement1.executeQuery(sql1);
+        ResultSet resultSet1 = QueryExecutor.executeQuery(sql1);
         while (resultSet1.next()) {
             int id_eticheta = resultSet1.getInt("eticheta_id");
 
@@ -332,8 +355,8 @@ public class JdbcClass {
         try {
             // Interogarea pentru a citi elementele din baza de date
             String sql = "SELECT * FROM Element";
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+
+            ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
             // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
             while (resultSet.next()) {
@@ -345,7 +368,7 @@ public class JdbcClass {
 
 
             resultSet.close();
-            statement.close();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -361,8 +384,7 @@ public class JdbcClass {
 
             // Interogarea pentru a citi elementele din baza de date
             String sql = "SELECT * FROM Album";
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
             // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
             while (resultSet.next()) {
@@ -371,8 +393,7 @@ public class JdbcClass {
                 Album al = new Album(name);
 
                 String sql1 = "SELECT * FROM album_element where album_id = " + idAlbum;
-                Statement statement1 = con.createStatement();
-                ResultSet resultSet1 = statement1.executeQuery(sql1);
+                ResultSet resultSet1 = QueryExecutor.executeQuery(sql1);
                 while (resultSet1.next()) {
                     int id_element = resultSet1.getInt("element_id");
 
@@ -384,7 +405,6 @@ public class JdbcClass {
             }
 
             resultSet.close();
-            statement.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -400,8 +420,7 @@ public class JdbcClass {
 
             // Interogarea pentru a citi elementele din baza de date
             String sql = "SELECT * FROM eticheta";
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery(sql);
+            ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
             // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
             while (resultSet.next()) {
@@ -413,7 +432,6 @@ public class JdbcClass {
 
 
             resultSet.close();
-            statement.close();
 
         } catch (
                 SQLException e) {
@@ -421,5 +439,184 @@ public class JdbcClass {
         }
 
         return tags;
+    }
+
+    public static void deleteElement(Element el) {
+        try {
+            int elementId = getIDByNume("Element", el.getName());
+            if (el instanceof Fotografie)
+                JdbcClass.deleteImagine(elementId);
+            else if (el instanceof Videoclip)
+                JdbcClass.deleteVideoclip(elementId);
+            deleteElementDinAlbum(elementId);
+            deleteElementEticheta(elementId);
+            String deleteElementSql = "DELETE FROM Element WHERE id = ?";
+            PreparedStatement deleteElementStatement = con.prepareStatement(deleteElementSql);
+            deleteElementStatement.setInt(1, elementId);
+            deleteElementStatement.executeUpdate();
+            deleteElementStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteElementDinAlbum(int elementId) {
+        try {
+            String deleteElementDinAlbumSql = "DELETE FROM album_element WHERE element_id = ?";
+            PreparedStatement deleteElementDinAlbumStatement = con.prepareStatement(deleteElementDinAlbumSql);
+            deleteElementDinAlbumStatement.setInt(1, elementId);
+            deleteElementDinAlbumStatement.executeUpdate();
+            deleteElementDinAlbumStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteElementDinAlbum(String elementName) {
+        try {
+            int elementId = JdbcClass.getIDByNume("Element", elementName);
+            String deleteElementDinAlbumSql = "DELETE FROM album_element WHERE element_id = ?";
+            PreparedStatement deleteElementDinAlbumStatement = con.prepareStatement(deleteElementDinAlbumSql);
+            deleteElementDinAlbumStatement.setInt(1, elementId);
+            deleteElementDinAlbumStatement.executeUpdate();
+            deleteElementDinAlbumStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteAlbumElement(int albumId) {
+        try {
+            String deleteElementDinAlbumSql = "DELETE FROM album_element WHERE album_id = ?";
+            PreparedStatement deleteElementDinAlbumStatement = con.prepareStatement(deleteElementDinAlbumSql);
+            deleteElementDinAlbumStatement.setInt(1, albumId);
+            deleteElementDinAlbumStatement.executeUpdate();
+            deleteElementDinAlbumStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteElementEticheta(int elementId) {
+        try {
+            String deleteElementDinAlbumSql = "DELETE FROM element_eticheta WHERE element_id = ?";
+            PreparedStatement deleteElementDinAlbumStatement = con.prepareStatement(deleteElementDinAlbumSql);
+            deleteElementDinAlbumStatement.setInt(1, elementId);
+            deleteElementDinAlbumStatement.executeUpdate();
+            deleteElementDinAlbumStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void deleteEtichetaElement(int etichetaId) {
+        try {
+            String deleteElementDinAlbumSql = "DELETE FROM element_eticheta WHERE eticheta_id = ?";
+            PreparedStatement deleteElementDinAlbumStatement = con.prepareStatement(deleteElementDinAlbumSql);
+            deleteElementDinAlbumStatement.setInt(1, etichetaId);
+            deleteElementDinAlbumStatement.executeUpdate();
+            deleteElementDinAlbumStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void deleteEtichetaElement(Eticheta et) {
+        try {
+            int etichetaId = getIDByNume("Eticheta", et.getName());
+            String deleteElementDinAlbumSql = "DELETE FROM element_eticheta WHERE eticheta_id = ?";
+            PreparedStatement deleteElementDinAlbumStatement = con.prepareStatement(deleteElementDinAlbumSql);
+            deleteElementDinAlbumStatement.setInt(1, etichetaId);
+            deleteElementDinAlbumStatement.executeUpdate();
+            deleteElementDinAlbumStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteImagine(int elementId) {
+        try {
+            String getElSql = "select id from imagine WHERE element_id = " + elementId;
+            ResultSet resultSet = QueryExecutor.executeQuery(getElSql);
+            if (resultSet.next()) {
+                int imagineId = resultSet.getInt("id");
+
+                deleteFotografie(imagineId);
+
+                String deleteImagineSql = "DELETE FROM Imagine WHERE id = ?";
+                PreparedStatement deleteImagineStatement = con.prepareStatement(deleteImagineSql);
+                deleteImagineStatement.setInt(1, imagineId);
+                deleteImagineStatement.executeUpdate();
+                deleteImagineStatement.close();
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteFotografie(int imagineId) {
+        try {
+
+            String getImgSql = "select id from Fotografie WHERE imagine_id = " + imagineId;
+            ResultSet resultSet = QueryExecutor.executeQuery(getImgSql);
+            if (resultSet.next()) {
+                int fotografieId = resultSet.getInt("id");
+                String deleteFotografieSql = "DELETE FROM Fotografie WHERE id = ?";
+                PreparedStatement deleteFotografieStatement = con.prepareStatement(deleteFotografieSql);
+                deleteFotografieStatement.setInt(1, fotografieId);
+                deleteFotografieStatement.executeUpdate();
+                deleteFotografieStatement.close();
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteVideoclip(int elementId) {
+        try {
+            String getElSql = "select id from videoclip WHERE element_id = " + elementId;
+            ResultSet resultSet = QueryExecutor.executeQuery(getElSql);
+            if (resultSet.next()) {
+                int videoclipId = resultSet.getInt("id");
+
+                String deleteVideoclipSql = "DELETE FROM Videoclip WHERE id = ?";
+                PreparedStatement deleteVideoclipStatement = con.prepareStatement(deleteVideoclipSql);
+                deleteVideoclipStatement.setInt(1, videoclipId);
+                deleteVideoclipStatement.executeUpdate();
+                deleteVideoclipStatement.close();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteAlbum(Album al) {
+        try {
+            int albumId = getIDByNume("Album", al.getName());
+            deleteAlbumElement(albumId);
+            String deleteAlbumSql = "DELETE FROM Album WHERE id = ?";
+            PreparedStatement deleteAlbumStatement = con.prepareStatement(deleteAlbumSql);
+            deleteAlbumStatement.setInt(1, albumId);
+            deleteAlbumStatement.executeUpdate();
+            deleteAlbumStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteEticheta(Eticheta et) {
+        try {
+            int tagId = getIDByNume("Eticheta", et.getName());
+            deleteEtichetaElement(tagId);
+            String deleteAlbumSql = "DELETE FROM Eticheta WHERE id = ?";
+            PreparedStatement deleteAlbumStatement = con.prepareStatement(deleteAlbumSql);
+            deleteAlbumStatement.setInt(1, tagId);
+            deleteAlbumStatement.executeUpdate();
+            deleteAlbumStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -10,4 +10,6 @@ select *
 from Album;
 select *
 from album_element;
+select *
+from element_eticheta;
 SELECT * FROM Element where id = 1
