@@ -50,54 +50,74 @@ public class ServiciuGalerie {
             }
         } catch (ElementNotFoundException e) {
             System.out.println("Eroare: " + e.getMessage());
-            // Sau puteti face si alte actiuni de gestionare a exceptiei
         }
     }
 
 
     // Modificarea numelui sau descrierii unei imagini sau videoclip existente
     public void updateElement(String name, String newName, String newDescription) {
-        Element element = elements.get(name);
-        if (element != null) {
-            // Eliminăm elementul cu cheia veche
-            elements.remove(name);
-            // Actualizăm cheia elementului
-            element.setName(newName);
-            element.setDescription(newDescription);
-            JdbcClass.updateElement(element);
-            // Adăugăm elementul cu cheia nouă
-            elements.put(newName, element);
+        try {
+            Element element = elements.get(name);
+            if (element != null) {
+                // Eliminăm elementul cu cheia veche
+                elements.remove(name);
+                // Actualizăm cheia elementului
+                element.setName(newName);
+                element.setDescription(newDescription);
+                JdbcClass.updateElement(element);
+                // Adăugăm elementul cu cheia nouă
+                elements.put(newName, element);
+            } else {
+                throw new ElementNotFoundException("Elementul '" + name + "' nu a fost găsit.");
+            }
+            AuditService.logAction("updateElement");
+        } catch (ElementNotFoundException e) {
+            System.out.println("Eroare: " + e.getMessage());
         }
-        AuditService.logAction("updateElement");
     }
 
     // Vizualizarea unei imagini/videoclip
     public Element viewElement(String name) {
-        AuditService.logAction("viewElement");
-        return elements.get(name);
+        try {
+            AuditService.logAction("viewElement");
+            Element element = elements.get(name);
+            if (element != null) {
+                return element;
+            } else {
+                throw new ElementNotFoundException("Elementul '" + name + "' nu a fost găsit.");
+            }
+        } catch (ElementNotFoundException e) {
+            System.out.println("Eroare: " + e.getMessage());
+            return null;
+        }
     }
 
     //  Adaugarea unei etichete pentru o imagine/videoclip
     public void addTag(String name, String tag) {
-        Element el = elements.get(name);
-        if (el != null) {
-            Eticheta et = new Eticheta(tag);
-            //pentru a evita verificarea manuală a
-            // existenței etichetei înainte de a o
-            // adăuga în map
-            tags.putIfAbsent(et.getName(), et);
-            if (el.contineEticheta(et)) {
-                System.out.println("Eticheta deja existenta la element.");
+        try {
+            Element el = elements.get(name);
+            if (el != null) {
+                Eticheta et = new Eticheta(tag);
+                //pentru a evita verificarea manuală a
+                // existenței etichetei înainte de a o
+                // adăuga în map
+                tags.putIfAbsent(et.getName(), et);
+                if (el.contineEticheta(et)) {
+                    System.out.println("Eticheta deja existenta la element.");
+                } else {
+                    el.addTagToElment(et);
+                    JdbcClass.insertEticheta(et);
+                    JdbcClass.insertElementEticheta(el,et);
+                    System.out.println("Eticheta adaugata cu succes.");
+                }
+                AuditService.logAction("addTag");
             } else {
-                el.addTagToElment(et);
-                JdbcClass.insertEticheta(et);
-                JdbcClass.insertElementEticheta(el,et);
-                System.out.println("Eticheta adaugata cu succes.");
+                throw new ElementNotFoundException("Elementul '" + name + "' nu a fost găsit.");
             }
-        } else {
-            System.out.println("Elementul nu exista!");
+        } catch (ElementNotFoundException e) {
+            System.out.println("Eroare: " + e.getMessage());
+
         }
-        AuditService.logAction("addTag");
     }
     //  Stergerea unei etichete pentru o imagine/videoclip
 
@@ -243,6 +263,14 @@ public class ServiciuGalerie {
             AuditService.logAction("deleteAlbum");
         }
     }
+
+    //
+   public int sizeOfGalery(){
+        return elements.values().stream()
+                .mapToInt(Element::getSize)
+                .sum();
+    }
+
 
     //citire data
     public LocalDate readLocalData(String date) {

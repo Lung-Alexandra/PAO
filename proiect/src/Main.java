@@ -1,11 +1,13 @@
-import model.*;
+import model.Album;
+import model.Element;
+import model.Eticheta;
 import service.AuditService;
 import service.ServiciuGalerie;
 import util.Filtru;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.List;
+import java.util.Scanner;
 
 
 public class Main {
@@ -72,6 +74,7 @@ public class Main {
                 case "13" -> {vizualizareElemAlbum();AuditService.logAction("vizualizareElemAlbum");}
                 case "14" -> {afiseazaAlbume();AuditService.logAction("afiseazaAlbume");}
                 case "15" -> {filtrareElemente();AuditService.logAction("filtrareElemente");}
+                case "16" -> {dimensiuneTotala();AuditService.logAction("dimensiuneTotala");}
                 case "0" -> {
                     scanner.close();
                     exit = true;
@@ -80,6 +83,7 @@ public class Main {
             }
         }
     }
+
 
 
     private static void afisareMeniu() {
@@ -364,4 +368,12 @@ public class Main {
             default -> System.out.println("Operatie invalida!");
         }
     }
+
+    //16
+    private static void dimensiuneTotala() {
+        int totalSize = serviciuGalerie.sizeOfGalery();
+
+        System.out.println("Dimensiunea totală a elementelor este: " + totalSize);
+    }
+
 }

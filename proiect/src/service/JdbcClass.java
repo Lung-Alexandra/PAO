@@ -76,20 +76,19 @@ public class JdbcClass {
             e.printStackTrace();
         }
     }
-    public static void updateImagine(Element element)  {
-
-        try{
-            int idElement = getIDByNume("Element",element.getName());
-            String sql = "UPDATE Element SET name = ?, description = ? WHERE id = "+idElement;
-            PreparedStatement pstmt =  QueryExecutor.executeUpdate(sql);
-            pstmt.setString(1, element.getName());
-            pstmt.setString(2, element.getDescription());
-            pstmt.executeUpdate();
-            pstmt.close();
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void updateImagine(Element element)  {
+//        try{
+//            int idElement = getIDByNume("Element",element.getName());
+//            String sql = "UPDATE Imaggine SET name = ?, description = ? WHERE element_id = "+idElement;
+//            PreparedStatement pstmt =  QueryExecutor.executeUpdate(sql);
+//            pstmt.setString(1, element.getName());
+//            pstmt.setString(2, element.getDescription());
+//            pstmt.executeUpdate();
+//            pstmt.close();
+//        }catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public static void insertElement(Element element) throws SQLException {
         try {
