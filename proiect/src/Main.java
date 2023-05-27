@@ -140,7 +140,7 @@ public class Main {
         System.out.println("2. Adaugare imagine/videoclip in galerie");
         System.out.println("3. Stergere imagine/videoclip din galerie");
         System.out.println("4. Cautare imagine/videoclip in galerie dupa nume");
-        System.out.println("5. Actualizare (nume si descriere) imagine/videoclip din galerie");
+        System.out.println("5. Actualizare imagine/videoclip din galerie");
         System.out.println("6. Adaugare/Stergere eticheta la imagine/videoclip");
         System.out.println("7. Vizualizare elemente dupa eticheta");
         System.out.println("8. Sortare imagini/videoclipuri dupa diferite criterii");

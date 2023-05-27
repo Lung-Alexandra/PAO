@@ -18,7 +18,7 @@ public class JdbcClass {
     public static int getIDByNume(String tableName, String name) throws SQLException {
         int id = 0;
         try {
-            // Obținerea ultimului id din tabela Element
+            // Obținerea ultimului id din tabela 
             String sql = "SELECT * FROM " + tableName + " Where name = " + "\"" + name + "\"";
             ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
@@ -41,7 +41,7 @@ public class JdbcClass {
         try {
 
 
-            // Obținerea ultimului id din tabela Element
+            // Obținerea ultimului id din tabela 
             String sql = "SELECT MAX(id) FROM " + tableName;
 
             ResultSet resultSet = QueryExecutor.executeQuery(sql);
@@ -62,14 +62,15 @@ public class JdbcClass {
         return lastElementId;
     }
 
-    public static void updateElement(Element element) {
+    public static void updateElement(Element element, String numeVechi) {
 
         try {
-            int idElement = getIDByNume("Element", element.getName());
+            int idElement = getIDByNume("Element", numeVechi);
             String sql = "UPDATE Element SET name = ?, description = ?, size = ? WHERE id = " + idElement;
             PreparedStatement pstmt = QueryExecutor.executeUpdate(sql);
             pstmt.setString(1, element.getName());
             pstmt.setString(2, element.getDescription());
+            pstmt.setInt(3, element.getSize());
             pstmt.executeUpdate();
             pstmt.close();
             if( element instanceof  Videoclip){
@@ -92,7 +93,7 @@ public class JdbcClass {
             pstmt.executeUpdate();
             pstmt.close();
 
-            // Interogarea pentru a citi elementele din baza de date
+            
             String sqlImg = "SELECT * FROM Imagine where element_id = " + idElement;
 
             ResultSet resultSetImg = QueryExecutor.executeQuery(sqlImg);
@@ -132,7 +133,7 @@ public class JdbcClass {
     public static void insertElement(Element element) throws SQLException {
         try {
 
-            // Exemplu de inserare a unui element în baza de date
+            // insearare
             String sql = "INSERT INTO Element (id, name, description,size, creationDate) VALUES (?, ?, ?, ?, ?)";
 
 
@@ -209,7 +210,7 @@ public class JdbcClass {
             insertElement(el);
 
             int lastElementId = getLastId("Element");
-            int lastId = getLastId("Imagine") + 1;
+            int lastId = getLastId("Videoclip") + 1;
             // Inserting the Videoclip with the last inserted id
             String videoclipInsertSql = "INSERT INTO Videoclip (id,element_id, duration) VALUES (?,?, ?)";
             PreparedStatement videoclipInsertStatement = con.prepareStatement(videoclipInsertSql);
@@ -228,7 +229,7 @@ public class JdbcClass {
     public static void insertAlbum(Album album) {
         try {
 
-            // Exemplu de inserare a unui album în baza de date
+            // insearare album în baza de date
             String sql = "INSERT INTO Album (id, name) VALUES (?, ?)";
 
             // Obținerea ultimului ID
@@ -250,7 +251,7 @@ public class JdbcClass {
         try {
 
 
-            // Exemplu de inserare a unui album în baza de date
+            // insearare
             String sql = "INSERT INTO album_element (album_id, element_id) VALUES (?, ?)";
 
             // Obținerea ultimului ID
@@ -273,7 +274,7 @@ public class JdbcClass {
         try {
 
 
-            // Exemplu de inserare a unui album în baza de date
+            // insearare
             String sql = "INSERT INTO Element_Eticheta (element_id,eticheta_id) VALUES (?, ?)";
 
             // Obținerea ultimului ID
@@ -296,7 +297,7 @@ public class JdbcClass {
         try {
 
 
-            // Exemplu de inserare a unei etichete în baza de date
+            // inserarea unei etichete în baza de date
             String sql = "INSERT INTO Eticheta (id, name) VALUES (?, ?)";
 
             // Obținerea ultimului ID
@@ -315,7 +316,7 @@ public class JdbcClass {
     }
 
     public static Element readElement(int id) throws SQLException {
-        // Interogarea pentru a citi elementele din baza de date
+        
         String sql = "SELECT * FROM Element where id = " + id;
 
         ResultSet resultSet = QueryExecutor.executeQuery(sql);
@@ -326,7 +327,7 @@ public class JdbcClass {
             LocalDate creationDate = resultSet.getDate("creationDate").toLocalDate();
 
 
-            // Interogarea pentru a citi elementele din baza de date
+            
             String sqlImg = "SELECT * FROM Imagine where element_id = " + id;
 
             ResultSet resultSetImg = QueryExecutor.executeQuery(sqlImg);
@@ -366,7 +367,7 @@ public class JdbcClass {
     }
 
     private static Eticheta readTag(int idEticheta) throws SQLException {
-        // Interogarea pentru a citi elementele din baza de date
+        
         String sql = "SELECT * FROM eticheta where id = " + idEticheta;
         ResultSet resultSet = QueryExecutor.executeQuery(sql);
         if (resultSet.next()) {
@@ -391,12 +392,11 @@ public class JdbcClass {
         Map<String, Element> elements = new HashMap<>();
 
         try {
-            // Interogarea pentru a citi elementele din baza de date
+            
             String sql = "SELECT * FROM Element";
 
             ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
-            // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 Element element = readElement(id);
@@ -420,11 +420,10 @@ public class JdbcClass {
 
         try {
 
-            // Interogarea pentru a citi elementele din baza de date
+            
             String sql = "SELECT * FROM Album";
             ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
-            // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
             while (resultSet.next()) {
                 int idAlbum = resultSet.getInt("id");
                 String name = resultSet.getString("name");
@@ -456,11 +455,10 @@ public class JdbcClass {
 
         try {
 
-            // Interogarea pentru a citi elementele din baza de date
+            
             String sql = "SELECT * FROM eticheta";
             ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
-            // Parcurgerea rezultatelor și crearea obiectelor Element corespunzătoare
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
 

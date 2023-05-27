@@ -77,7 +77,7 @@ public class ServiciuGalerie {
                     ((Fotografie) element).setCameraSettings(((Fotografie) newElement).getCameraSettings());
 
                 }
-                JdbcClass.updateElement(element);
+                JdbcClass.updateElement(element,name);
                 // Adăugăm elementul cu cheia nouă
                 elements.put(newElement.getName(), element);
             } else {
