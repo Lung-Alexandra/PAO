@@ -1,6 +1,4 @@
-import model.Album;
-import model.Element;
-import model.Eticheta;
+import model.*;
 import service.AuditService;
 import service.ServiciuGalerie;
 import util.Filtru;
@@ -59,22 +57,70 @@ public class Main {
             afisareMeniu();
             String optiune = scanner.nextLine();
             switch (optiune) {
-                case "1" -> {afiseazaElemente(); AuditService.logAction("afiseazaElemente");}
-                case "2" -> {adaugaElement();AuditService.logAction("adaugaElement");}
-                case "3" -> {stergeElement();AuditService.logAction("stergeElement");}
-                case "4" -> {cautaElement();AuditService.logAction("cautaElement");}
-                case "5" -> {actualizeaza();AuditService.logAction("actualizeaza");}
-                case "6" -> {adaugaEticheta();AuditService.logAction("adaugaEticheta");}
-                case "7" -> {vizualizareDupaEticheta();AuditService.logAction("vizualizareDupaEticheta");}
-                case "8" -> {sortareElemente();AuditService.logAction("sortareElemente");}
-                case "9" -> {adaugaAlbum();AuditService.logAction("adaugaAlbum");}
-                case "10" -> {adaugaElementAlbum();AuditService.logAction("adaugaElementAlbum");}
-                case "11" -> {stergeElementAlbum();AuditService.logAction("stergeElementAlbum");}
-                case "12" -> {stergeAlbum();AuditService.logAction("stergeAlbum");}
-                case "13" -> {vizualizareElemAlbum();AuditService.logAction("vizualizareElemAlbum");}
-                case "14" -> {afiseazaAlbume();AuditService.logAction("afiseazaAlbume");}
-                case "15" -> {filtrareElemente();AuditService.logAction("filtrareElemente");}
-                case "16" -> {dimensiuneTotala();AuditService.logAction("dimensiuneTotala");}
+                case "1" -> {
+                    afiseazaElemente();
+                    AuditService.logAction("afiseazaElemente");
+                }
+                case "2" -> {
+                    adaugaElement();
+                    AuditService.logAction("adaugaElement");
+                }
+                case "3" -> {
+                    stergeElement();
+                    AuditService.logAction("stergeElement");
+                }
+                case "4" -> {
+                    cautaElement();
+                    AuditService.logAction("cautaElement");
+                }
+                case "5" -> {
+                    actualizeazaElement();
+                    AuditService.logAction("actualizeazaElement");
+                }
+                case "6" -> {
+                    adaugaEticheta();
+                    AuditService.logAction("adaugaEticheta");
+                }
+                case "7" -> {
+                    vizualizareDupaEticheta();
+                    AuditService.logAction("vizualizareDupaEticheta");
+                }
+                case "8" -> {
+                    sortareElemente();
+                    AuditService.logAction("sortareElemente");
+                }
+                case "9" -> {
+                    adaugaAlbum();
+                    AuditService.logAction("adaugaAlbum");
+                }
+                case "10" -> {
+                    adaugaElementAlbum();
+                    AuditService.logAction("adaugaElementAlbum");
+                }
+                case "11" -> {
+                    stergeElementAlbum();
+                    AuditService.logAction("stergeElementAlbum");
+                }
+                case "12" -> {
+                    stergeAlbum();
+                    AuditService.logAction("stergeAlbum");
+                }
+                case "13" -> {
+                    vizualizareElemAlbum();
+                    AuditService.logAction("vizualizareElemAlbum");
+                }
+                case "14" -> {
+                    afiseazaAlbume();
+                    AuditService.logAction("afiseazaAlbume");
+                }
+                case "15" -> {
+                    filtrareElemente();
+                    AuditService.logAction("filtrareElemente");
+                }
+                case "16" -> {
+                    dimensiuneTotala();
+                    AuditService.logAction("dimensiuneTotala");
+                }
                 case "0" -> {
                     scanner.close();
                     exit = true;
@@ -83,7 +129,6 @@ public class Main {
             }
         }
     }
-
 
 
     private static void afisareMeniu() {
@@ -192,15 +237,168 @@ public class Main {
         }
     }
 
+    private static void meniuActualizareElement() {
+        System.out.println();
+        System.out.println("Ce doriti sa actualizati?");
+        System.out.println("=== Meniu ===");
+
+        System.out.println("1. Fotografie");
+        System.out.println("2. Videoclip");
+
+        System.out.println("0. Iesire");
+        System.out.print("Alegerea dumneavoastra: ");
+        System.out.println();
+    }
+
+    private static void meniuFotografie() {
+        System.out.println();
+        System.out.println("Ce doriti sa actualizati?");
+        System.out.println("=== Meniu ===");
+
+        System.out.println("1. Nume");
+        System.out.println("2. Descriere");
+        System.out.println("3. Dimensiune");
+        System.out.println("4. Rezolutie");
+        System.out.println("5. Locatie");
+        System.out.println("6. Tip camera");
+        System.out.println("7. Setari camera");
+
+        System.out.println("0. Iesire");
+        System.out.print("Alegerea dumneavoastra: ");
+        System.out.println();
+    }
+
+    public static void actualizeazaFotografie(String numeElementModificare) {
+        Element newel = serviciuGalerie.viewElement(numeElementModificare);
+        boolean exit = false;
+        while (!exit) {
+            meniuFotografie();
+            String optiune = scanner.nextLine();
+            switch (optiune) {
+                case "1" -> {
+                    System.out.println("Introduceti noul nume:");
+                    String numeNou = scanner.nextLine().trim();
+                    newel.setName(numeNou);
+                }
+                case "2" -> {
+                    System.out.println("Introduceti noua descriere:");
+                    String descriereNoua = scanner.nextLine().trim();
+                    newel.setDescription(descriereNoua);
+                }
+                case "3" -> {
+                    System.out.println("Introduceti noua dimensiune:");
+                    int dimensiuneNoua = scanner.nextInt();
+                    scanner.nextLine();
+                    newel.setSize(dimensiuneNoua);
+                }
+                case "4" -> {
+                    System.out.println("Introduceti noua rezolutie:");
+                    String rezolutieNoua = scanner.nextLine().trim();
+                    ((Fotografie) newel).setResolution(rezolutieNoua);
+                }
+                case "5" -> {
+                    System.out.println("Introduceti noua locatie:");
+                    String locatieNoua = scanner.nextLine().trim();
+                    ((Fotografie) newel).setLocation(locatieNoua);
+
+                }
+                case "6" -> {
+                    System.out.println("Introduceti noul tip de camera:");
+                    String tipCameraNoua = scanner.nextLine().trim();
+                    ((Fotografie) newel).setCameraType(tipCameraNoua);
+                }
+                case "7" -> {
+                    System.out.println("Introduceti noile setari ale camerei:");
+                    String setariCameraNoi = scanner.nextLine().trim();
+                    ((Fotografie) newel).setCameraSettings(setariCameraNoi);
+                }
+
+                case "0" -> exit = true;
+                default -> System.out.println("Optiune invalida.");
+            }
+        }
+
+        serviciuGalerie.updateElement(numeElementModificare, newel);
+    }
+
+    private static void meniuVideoclip() {
+        System.out.println();
+        System.out.println("Ce doriti sa actualizati?");
+        System.out.println("=== Meniu ===");
+
+        System.out.println("1. Nume");
+        System.out.println("2. Descriere");
+        System.out.println("3. Dimensiune");
+        System.out.println("4. Durata");
+
+
+        System.out.println("0. Iesire");
+        System.out.print("Alegerea dumneavoastra: ");
+        System.out.println();
+    }
+
+    public static void actualizeazaVideoclip(String numeElementModificare) {
+        Element newel = serviciuGalerie.viewElement(numeElementModificare);
+        boolean exit = false;
+        while (!exit) {
+            meniuVideoclip();
+            String optiune = scanner.nextLine();
+            switch (optiune) {
+                case "1" -> {
+                    System.out.println("Introduceti noul nume:");
+                    String numeNou = scanner.nextLine().trim();
+                    newel.setName(numeNou);
+                }
+                case "2" -> {
+                    System.out.println("Introduceti noua descriere:");
+                    String descriereNoua = scanner.nextLine().trim();
+                    newel.setDescription(descriereNoua);
+                }
+                case "3" -> {
+                    System.out.println("Introduceti noua dimensiune:");
+                    int dimensiuneNoua = scanner.nextInt();
+                    scanner.nextLine();
+                    newel.setSize(dimensiuneNoua);
+                }
+                case "4" -> {
+                    System.out.println("Introduceti noua durata:");
+                    int durataNoua = scanner.nextInt();
+                    scanner.nextLine();
+                    ((Videoclip) newel).setDuration(durataNoua);
+                }
+
+                case "0" -> exit = true;
+                default -> System.out.println("Optiune invalida.");
+            }
+        }
+
+        serviciuGalerie.updateElement(numeElementModificare, newel);
+    }
+
     // 5
-    private static void actualizeaza() {
+    private static void actualizeazaElement() {
         System.out.println("Introduceti numele elementului de modificat:");
         String numeElementModificare = scanner.nextLine().trim();
-        System.out.println("Introduceti noul nume:");
-        String numeNou = scanner.nextLine().trim();
-        System.out.println("Introduceti noua descriere:");
-        String descriereNoua = scanner.nextLine().trim();
-        serviciuGalerie.updateElement(numeElementModificare, numeNou, descriereNoua);
+
+        boolean exit = false;
+        while (!exit) {
+            meniuActualizareElement();
+            String optiune = scanner.nextLine();
+            switch (optiune) {
+                case "1" -> {
+                    actualizeazaFotografie(numeElementModificare);
+                    AuditService.logAction("actualizeazaFotografie");
+                }
+                case "2" -> {
+                    actualizeazaVideoclip(numeElementModificare);
+                    AuditService.logAction("actualizeazaVideoclip");
+                }
+
+                case "0" -> exit = true;
+                default -> System.out.println("Optiune invalida.");
+            }
+        }
+
     }
 
     // 6
@@ -353,11 +551,11 @@ public class Main {
                     System.out.println("Nu exista elemente!");
                 }
             }
-            case "eticheta"->{
+            case "eticheta" -> {
                 System.out.print("Introduceti eticheta dupa care doriti sa filtrati elementele: ");
                 String eticheta = scanner.nextLine();
 
-                List<Element> elDupaEticheta = Filtru.filtrareDupaEticheta(serviciuGalerie.viewAllElements(),new Eticheta(eticheta));
+                List<Element> elDupaEticheta = Filtru.filtrareDupaEticheta(serviciuGalerie.viewAllElements(), new Eticheta(eticheta));
                 if (!elDupaEticheta.isEmpty()) {
                     System.out.println("Elemente cu eticheta " + eticheta + ":");
                     elDupaEticheta.forEach(System.out::println);

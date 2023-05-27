@@ -55,18 +55,31 @@ public class ServiciuGalerie {
 
 
     // Modificarea numelui sau descrierii unei imagini sau videoclip existente
-    public void updateElement(String name, String newName, String newDescription) {
+    public void updateElement(String name, Element newElement) {
         try {
             Element element = elements.get(name);
             if (element != null) {
                 // Eliminăm elementul cu cheia veche
                 elements.remove(name);
                 // Actualizăm cheia elementului
-                element.setName(newName);
-                element.setDescription(newDescription);
+                element.setName(newElement.getName());
+                element.setDescription(newElement.getDescription());
+                element.setSize(newElement.getSize());
+                element.setCreationDate(newElement.getCreationDate());
+                if (newElement instanceof Videoclip){
+                    ((Videoclip) element).setDuration(((Videoclip) newElement).getDuration());
+
+                }
+                else{
+                    ((Fotografie) element).setResolution(((Fotografie) newElement).getResolution());
+                    ((Fotografie) element).setLocation(((Fotografie) newElement).getLocation());
+                    ((Fotografie) element).setCameraType(((Fotografie) newElement).getCameraType());
+                    ((Fotografie) element).setCameraSettings(((Fotografie) newElement).getCameraSettings());
+
+                }
                 JdbcClass.updateElement(element);
                 // Adăugăm elementul cu cheia nouă
-                elements.put(newName, element);
+                elements.put(newElement.getName(), element);
             } else {
                 throw new ElementNotFoundException("Elementul '" + name + "' nu a fost găsit.");
             }

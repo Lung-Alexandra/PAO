@@ -62,33 +62,72 @@ public class JdbcClass {
         return lastElementId;
     }
 
-    public static void updateElement(Element element)  {
+    public static void updateElement(Element element) {
 
-        try{
-            int idElement = getIDByNume("Element",element.getName());
-            String sql = "UPDATE Element SET name = ?, description = ? WHERE id = "+idElement;
-            PreparedStatement pstmt =  QueryExecutor.executeUpdate(sql);
+        try {
+            int idElement = getIDByNume("Element", element.getName());
+            String sql = "UPDATE Element SET name = ?, description = ?, size = ? WHERE id = " + idElement;
+            PreparedStatement pstmt = QueryExecutor.executeUpdate(sql);
             pstmt.setString(1, element.getName());
             pstmt.setString(2, element.getDescription());
             pstmt.executeUpdate();
             pstmt.close();
-        }catch (SQLException e) {
+            if( element instanceof  Videoclip){
+                updateVideoclip(element,idElement);
+            }
+            else{
+                updateImagine(element,idElement);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-//    public static void updateImagine(Element element)  {
-//        try{
-//            int idElement = getIDByNume("Element",element.getName());
-//            String sql = "UPDATE Imaggine SET name = ?, description = ? WHERE element_id = "+idElement;
-//            PreparedStatement pstmt =  QueryExecutor.executeUpdate(sql);
-//            pstmt.setString(1, element.getName());
-//            pstmt.setString(2, element.getDescription());
-//            pstmt.executeUpdate();
-//            pstmt.close();
-//        }catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    public static void updateImagine(Element element,int idElement) {
+        try {
+            String sql = "UPDATE Imagine SET resolution = ?, location = ? WHERE element_id = " + idElement;
+            PreparedStatement pstmt = QueryExecutor.executeUpdate(sql);
+            pstmt.setString(1, ((Imagine)element).getResolution());
+            pstmt.setString(2, ((Imagine)element).getLocation());
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // Interogarea pentru a citi elementele din baza de date
+            String sqlImg = "SELECT * FROM Imagine where element_id = " + idElement;
+
+            ResultSet resultSetImg = QueryExecutor.executeQuery(sqlImg);
+            if (resultSetImg.next()) {
+                int idimg = resultSetImg.getInt(1);
+                updateFotografie(element, idimg);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+  public static void updateVideoclip(Element element,int idElement) {
+        try {
+            String sql = "UPDATE Videoclip SET duration = ? WHERE element_id = " + idElement;
+            PreparedStatement pstmt = QueryExecutor.executeUpdate(sql);
+            pstmt.setInt(1, ((Videoclip)element).getDuration());
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateFotografie(Element element,int idImagine) {
+        try {
+            String sql = "UPDATE Fotografie SET cameraType = ?, cameraSettings = ? WHERE imagine_id = " + idImagine;
+            PreparedStatement pstmt = QueryExecutor.executeUpdate(sql);
+            pstmt.setString(1, ((Fotografie)element).getCameraType());
+            pstmt.setString(2, ((Fotografie)element).getCameraSettings());
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void insertElement(Element element) throws SQLException {
         try {
@@ -507,6 +546,7 @@ public class JdbcClass {
             e.printStackTrace();
         }
     }
+
     public static void deleteEtichetaElement(int etichetaId) {
         try {
             String deleteElementDinAlbumSql = "DELETE FROM element_eticheta WHERE eticheta_id = ?";
@@ -518,6 +558,7 @@ public class JdbcClass {
             e.printStackTrace();
         }
     }
+
     public static void deleteEtichetaElement(Eticheta et) {
         try {
             int etichetaId = getIDByNume("Eticheta", et.getName());
