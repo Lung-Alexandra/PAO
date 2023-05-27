@@ -163,7 +163,6 @@ public class JdbcClass {
     public static void insertAlbum(Album album) {
         try {
 
-
             // Exemplu de inserare a unui album în baza de date
             String sql = "INSERT INTO Album (id, name) VALUES (?, ?)";
 
@@ -196,6 +195,29 @@ public class JdbcClass {
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, alId);
             statement.setInt(2, elId);
+            statement.executeUpdate();
+            statement.close();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void insertElementEticheta(Element el, Eticheta et) {
+        try {
+
+
+            // Exemplu de inserare a unui album în baza de date
+            String sql = "INSERT INTO Element_Eticheta (element_id,eticheta_id) VALUES (?, ?)";
+
+            // Obținerea ultimului ID
+            int etId = getIDByNume("Eticheta", et.getName());
+            int elId = getIDByNume("Element", el.getName());
+
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, elId);
+            statement.setInt(2, etId);
             statement.executeUpdate();
             statement.close();
 
@@ -255,7 +277,10 @@ public class JdbcClass {
                 if (resultSetfoto.next()) {
                     String cameraType = resultSetfoto.getString("cameraType");
                     String cameraSettings = resultSetfoto.getString("cameraSettings");
-                    return new Fotografie(name, description, size, creationDate, resolution, location, cameraType, cameraSettings);
+                    Element el = new Fotografie(name, description, size, creationDate, resolution, location, cameraType, cameraSettings);
+
+                    readTags(el, id);
+                    return el;
                 }
 
 
@@ -266,12 +291,39 @@ public class JdbcClass {
                 if (resultSetVid.next()) {
                     int duration = resultSetVid.getInt("duration");
 
-                    return new Videoclip(name, description, size, creationDate, duration);
+                    Element el = new Videoclip(name, description, size, creationDate, duration);
+
+                    readTags(el, id);
+                    return el;
                 }
 
             }
         }
         return null;
+    }
+
+    private static Eticheta readTag(int idEticheta) throws SQLException {
+        // Interogarea pentru a citi elementele din baza de date
+        String sql = "SELECT * FROM eticheta where id = " + idEticheta;
+        Statement statement = con.createStatement();
+        ResultSet resultSet = statement.executeQuery(sql);
+        if (resultSet.next()) {
+            String name = resultSet.getString("name");
+            return new Eticheta(name);
+        }
+        return null;
+    }
+
+    private static void readTags(Element el, int id) throws SQLException {
+        String sql1 = "SELECT * FROM element_eticheta where element_id = " + id;
+        Statement statement1 = con.createStatement();
+        ResultSet resultSet1 = statement1.executeQuery(sql1);
+        while (resultSet1.next()) {
+            int id_eticheta = resultSet1.getInt("eticheta_id");
+
+            Eticheta et = readTag(id_eticheta);
+            el.addTagToElment(et);
+        }
     }
 
     public static Map<String, Element> readElements() {
@@ -370,5 +422,4 @@ public class JdbcClass {
 
         return tags;
     }
-
 }

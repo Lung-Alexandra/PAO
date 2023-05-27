@@ -76,8 +76,9 @@ public class ServiciuGalerie {
             if (el.contineEticheta(et)) {
                 System.out.println("Eticheta deja existenta la element.");
             } else {
-                el.adaugaEticheta(et);
+                el.addTagToElment(et);
                 JdbcClass.insertEticheta(et);
+                JdbcClass.insertElementEticheta(el,et);
                 System.out.println("Eticheta adaugata cu succes.");
             }
         } else {

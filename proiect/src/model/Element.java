@@ -62,7 +62,7 @@ public class Element implements Comparator<Element> {
         this.elementTags = elementTags;
     }
 
-    public void adaugaEticheta(Eticheta eticheta) {
+    public void addTagToElment(Eticheta eticheta) {
         this.elementTags.add(eticheta);
     }
 
