@@ -94,30 +94,34 @@ public class Main {
                     AuditService.logAction("adaugaAlbum");
                 }
                 case "10" -> {
-                    adaugaElementAlbum();
-                    AuditService.logAction("adaugaElementAlbum");
-                }
-                case "11" -> {
-                    stergeElementAlbum();
-                    AuditService.logAction("stergeElementAlbum");
-                }
-                case "12" -> {
-                    stergeAlbum();
-                    AuditService.logAction("stergeAlbum");
-                }
-                case "13" -> {
-                    vizualizareElemAlbum();
-                    AuditService.logAction("vizualizareElemAlbum");
-                }
-                case "14" -> {
                     afiseazaAlbume();
                     AuditService.logAction("afiseazaAlbume");
                 }
+                case "11" -> {
+                    actulizeazaAlbum();
+                    AuditService.logAction("actulizeazaAlbum");
+                }
+                case "12" -> {
+                    adaugaElementAlbum();
+                    AuditService.logAction("adaugaElementAlbum");
+                }
+                case "13" -> {
+                    stergeElementAlbum();
+                    AuditService.logAction("stergeElementAlbum");
+                }
+                case "14" -> {
+                    stergeAlbum();
+                    AuditService.logAction("stergeAlbum");
+                }
                 case "15" -> {
+                    vizualizareElemAlbum();
+                    AuditService.logAction("vizualizareElemAlbum");
+                }
+                case "16" -> {
                     filtrareElemente();
                     AuditService.logAction("filtrareElemente");
                 }
-                case "16" -> {
+                case "17" -> {
                     dimensiuneTotala();
                     AuditService.logAction("dimensiuneTotala");
                 }
@@ -145,12 +149,14 @@ public class Main {
         System.out.println("7. Vizualizare elemente dupa eticheta");
         System.out.println("8. Sortare imagini/videoclipuri dupa diferite criterii");
         System.out.println("9. Creare album gol");
-        System.out.println("10. Adaugare elemente in album");
-        System.out.println("11. Stergere element din album");
-        System.out.println("12. Stergere album");
-        System.out.println("13. Vizualizare elemente album");
-        System.out.println("14. Vizualizare toate albumele");
-        System.out.println("15. Filtrare imagini/videoclipuri dupa diferite criterii");
+        System.out.println("10. Vizualizare toate albumele");
+        System.out.println("11. Actualizare nume album");
+        System.out.println("12. Adaugare elemente in album");
+        System.out.println("13. Stergere element din album");
+        System.out.println("14. Stergere album");
+        System.out.println("15. Vizualizare elemente album");
+        System.out.println("16. Filtrare imagini/videoclipuri dupa diferite criterii");
+        System.out.println("17. Afisare dimensiune totala");
 
         System.out.println("0. Iesire");
         System.out.print("Alegerea dumneavoastra: ");
@@ -459,10 +465,18 @@ public class Main {
         serviciuGalerie.createAlbum(numeAlbum);
 
     }
+    private static void actulizeazaAlbum(){
+        System.out.println("Introduceti numele albumului:");
+        String numeAlbum = scanner.nextLine();
 
+        System.out.println("Introduceti noul nume:");
+        String numeNou = scanner.nextLine().trim();
+
+        serviciuGalerie.updateAlbum(numeAlbum,numeNou);
+    }
     // 10
     private static void adaugaElementAlbum() {
-        System.out.println("Introduceti numele elementului de adaugaElementt in album:");
+        System.out.println("Introduceti numele elementului de adaugat in album:");
         String numeElementAdaugare = scanner.nextLine();
         System.out.println("Introduceti numele albumului:");
         String numeAl = scanner.nextLine();

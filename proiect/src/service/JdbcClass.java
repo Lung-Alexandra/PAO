@@ -62,7 +62,20 @@ public class JdbcClass {
         return lastElementId;
     }
 
-    public static void updateElement(Element element, String numeVechi) {
+    public static void updateAlbum(Album alb, String numeVechi) {
+
+        try {
+            int idalb = getIDByNume("Album", numeVechi);
+            String sql = "UPDATE Album SET name = ? WHERE id = " + idalb;
+            PreparedStatement pstmt = QueryExecutor.executeUpdate(sql);
+            pstmt.setString(1, alb.getName());
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+public static void updateElement(Element element, String numeVechi) {
 
         try {
             int idElement = getIDByNume("Element", numeVechi);
@@ -258,7 +271,7 @@ public class JdbcClass {
             int alId = getIDByNume("Album", al.getName());
             int elId = getIDByNume("Element", el.getName());
 
-            PreparedStatement statement = con.prepareStatement(sql);
+            PreparedStatement statement = QueryExecutor.executeUpdate(sql);
             statement.setInt(1, alId);
             statement.setInt(2, elId);
             statement.executeUpdate();

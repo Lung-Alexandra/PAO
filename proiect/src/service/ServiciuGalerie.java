@@ -54,7 +54,7 @@ public class ServiciuGalerie {
     }
 
 
-    // Modificarea numelui sau descrierii unei imagini sau videoclip existente
+    // Modificarea  unei imagini sau videoclip existent
     public void updateElement(String name, Element newElement) {
         try {
             Element element = elements.get(name);
@@ -88,7 +88,25 @@ public class ServiciuGalerie {
             System.out.println("Eroare: " + e.getMessage());
         }
     }
+    public void updateAlbum(String name, String noulNume) {
+        try {
+            Album alb = getAlbumByName(name);
+            if (alb != null) {
 
+                // Actualizăm cheia elementului
+                alb.setName(noulNume);
+
+                JdbcClass.updateAlbum(alb,name);
+
+
+            } else {
+                throw new AlbumNotFoundException("Albumul '" + name + "' nu a fost găsit.");
+            }
+            AuditService.logAction("updateAlbum");
+        } catch (AlbumNotFoundException e) {
+            System.out.println("Eroare: " + e.getMessage());
+        }
+    }
     // Vizualizarea unei imagini/videoclip
     public Element viewElement(String name) {
         try {
