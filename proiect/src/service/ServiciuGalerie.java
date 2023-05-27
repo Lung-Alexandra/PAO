@@ -66,18 +66,17 @@ public class ServiciuGalerie {
                 element.setDescription(newElement.getDescription());
                 element.setSize(newElement.getSize());
                 element.setCreationDate(newElement.getCreationDate());
-                if (newElement instanceof Videoclip){
+                if (newElement instanceof Videoclip) {
                     ((Videoclip) element).setDuration(((Videoclip) newElement).getDuration());
 
-                }
-                else{
+                } else {
                     ((Fotografie) element).setResolution(((Fotografie) newElement).getResolution());
                     ((Fotografie) element).setLocation(((Fotografie) newElement).getLocation());
                     ((Fotografie) element).setCameraType(((Fotografie) newElement).getCameraType());
                     ((Fotografie) element).setCameraSettings(((Fotografie) newElement).getCameraSettings());
 
                 }
-                JdbcClass.updateElement(element,name);
+                JdbcClass.updateElement(element, name);
                 // Adăugăm elementul cu cheia nouă
                 elements.put(newElement.getName(), element);
             } else {
@@ -88,6 +87,7 @@ public class ServiciuGalerie {
             System.out.println("Eroare: " + e.getMessage());
         }
     }
+
     public void updateAlbum(String name, String noulNume) {
         try {
             Album alb = getAlbumByName(name);
@@ -96,7 +96,7 @@ public class ServiciuGalerie {
                 // Actualizăm cheia elementului
                 alb.setName(noulNume);
 
-                JdbcClass.updateAlbum(alb,name);
+                JdbcClass.updateAlbum(alb, name);
 
 
             } else {
@@ -107,6 +107,7 @@ public class ServiciuGalerie {
             System.out.println("Eroare: " + e.getMessage());
         }
     }
+
     // Vizualizarea unei imagini/videoclip
     public Element viewElement(String name) {
         try {
@@ -138,7 +139,7 @@ public class ServiciuGalerie {
                 } else {
                     el.addTagToElment(et);
                     JdbcClass.insertEticheta(et);
-                    JdbcClass.insertElementEticheta(el,et);
+                    JdbcClass.insertElementEticheta(el, et);
                     System.out.println("Eticheta adaugata cu succes.");
                 }
                 AuditService.logAction("addTag");
@@ -201,53 +202,67 @@ public class ServiciuGalerie {
 
     // Adaugarea unei imagini/videoclip in album
     public void addElementToAlbum(String albumName, String elementName) {
-        Album album = getAlbumByName(albumName);
-        if (album != null) {
-            Element element = elements.get(elementName);
-            if (element != null) {
-                album.addElementToAlbum(element);
-                JdbcClass.insertAlbumElement(album,element);
+        try {
+            Album album = getAlbumByName(albumName);
+            if (album != null) {
+                Element element = elements.get(elementName);
+                if (element != null) {
+                    album.addElementToAlbum(element);
+                    JdbcClass.insertAlbumElement(album, element);
+                } else {
+                    System.out.println("Elementul nu exista!");
+                }
             } else {
-                System.out.println("Elementul nu exista!");
+                throw new AlbumNotFoundException("Albumul '" + albumName + "' nu a fost găsit.");
             }
-        } else {
-            System.out.println("Albumul nu exista!");
+
+        } catch (AlbumNotFoundException e) {
+            System.out.println("Eroare: " + e.getMessage());
         }
         AuditService.logAction("addElementToAlbum");
     }
 
     // Stergerea unei imagini/videoclip din album
     public void removeElementFromAlbum(String albumName, String elementName) {
-        Album album = getAlbumByName(albumName);
-        if (album != null) {
-            Element element = elements.get(elementName);
-            if (element != null) {
-                album.removeElement(elementName);
-                JdbcClass.deleteElementDinAlbum(elementName);
+        try {
+            Album album = getAlbumByName(albumName);
+            if (album != null) {
+                Element element = elements.get(elementName);
+                if (element != null) {
+                    album.removeElement(elementName);
+                    JdbcClass.deleteElementDinAlbum(elementName);
+                } else {
+                    System.out.println("Elementul nu exista!");
+                }
             } else {
-                System.out.println("Elementul nu exista!");
+                throw new AlbumNotFoundException("Albumul '" + albumName + "' nu a fost găsit.");
             }
-        } else {
-            System.out.println("Albumul nu exista!");
+        } catch (AlbumNotFoundException e) {
+            System.out.println("Eroare: " + e.getMessage());
         }
         AuditService.logAction("removeElementFromAlbum");
     }
 
     // Vizualizarea continutului unui album
     public void viewAlbumContent(String albumName) {
-        Album album = getAlbumByName(albumName);
-        if (album != null) {
-            List<Element> elementeAlbum = album.getAlbumElements();
-            if (!elementeAlbum.isEmpty()) {
-                System.out.println("Elementele din albumul " + albumName + " sunt: ");
-                for (Element element : elementeAlbum) {
-                    System.out.println(element.toString());
+        try {
+            Album album = getAlbumByName(albumName);
+            if (album != null) {
+                List<Element> elementeAlbum = album.getAlbumElements();
+                if (!elementeAlbum.isEmpty()) {
+                    System.out.println("Elementele din albumul " + albumName + " sunt: ");
+                    for (Element element : elementeAlbum) {
+                        System.out.println(element.toString());
+                    }
+                } else {
+                    System.out.println("Albumul " + albumName + " este gol.");
                 }
             } else {
-                System.out.println("Albumul " + albumName + " este gol.");
+                throw new AlbumNotFoundException("Albumul '" + albumName + "' nu a fost găsit.");
             }
-        } else {
-            System.out.println("Albumul nu exista!");
+
+        } catch (AlbumNotFoundException e) {
+            System.out.println("Eroare: " + e.getMessage());
         }
         AuditService.logAction("viewAlbumContent");
 
@@ -283,20 +298,26 @@ public class ServiciuGalerie {
         AuditService.logAction("viewAllAlbums");
         return new ArrayList<>(albums);
     }
+
     public void deleteAlbum(String albumName) {
-        Album al = getAlbumByName(albumName);
-        if (al == null)
-            System.out.println("Albumul nu a fost gasit.");
-        else {
-            albums.remove(al);
-            JdbcClass.deleteAlbum(al);
-            System.out.println("Album sters cu succes.");
-            AuditService.logAction("deleteAlbum");
+        try {
+            Album al = getAlbumByName(albumName);
+            if (al != null) {
+                albums.remove(al);
+                JdbcClass.deleteAlbum(al);
+                System.out.println("Album sters cu succes.");
+                AuditService.logAction("deleteAlbum");
+            } else {
+                throw new AlbumNotFoundException("Albumul '" + albumName + "' nu a fost găsit.");
+            }
+
+        } catch (AlbumNotFoundException e) {
+            System.out.println("Eroare: " + e.getMessage());
         }
     }
 
     //
-   public int sizeOfGalery(){
+    public int sizeOfGalery() {
         return elements.values().stream()
                 .mapToInt(Element::getSize)
                 .sum();

@@ -276,55 +276,57 @@ public class Main {
 
     public static void actualizeazaFotografie(String numeElementModificare) {
         Element newel = serviciuGalerie.viewElement(numeElementModificare);
-        boolean exit = false;
-        while (!exit) {
-            meniuFotografie();
-            String optiune = scanner.nextLine();
-            switch (optiune) {
-                case "1" -> {
-                    System.out.println("Introduceti noul nume:");
-                    String numeNou = scanner.nextLine().trim();
-                    newel.setName(numeNou);
-                }
-                case "2" -> {
-                    System.out.println("Introduceti noua descriere:");
-                    String descriereNoua = scanner.nextLine().trim();
-                    newel.setDescription(descriereNoua);
-                }
-                case "3" -> {
-                    System.out.println("Introduceti noua dimensiune:");
-                    int dimensiuneNoua = scanner.nextInt();
-                    scanner.nextLine();
-                    newel.setSize(dimensiuneNoua);
-                }
-                case "4" -> {
-                    System.out.println("Introduceti noua rezolutie:");
-                    String rezolutieNoua = scanner.nextLine().trim();
-                    ((Fotografie) newel).setResolution(rezolutieNoua);
-                }
-                case "5" -> {
-                    System.out.println("Introduceti noua locatie:");
-                    String locatieNoua = scanner.nextLine().trim();
-                    ((Fotografie) newel).setLocation(locatieNoua);
+        if (newel != null) {
+            boolean exit = false;
+            while (!exit) {
+                meniuFotografie();
+                String optiune = scanner.nextLine();
+                switch (optiune) {
+                    case "1" -> {
+                        System.out.println("Introduceti noul nume:");
+                        String numeNou = scanner.nextLine().trim();
+                        newel.setName(numeNou);
+                    }
+                    case "2" -> {
+                        System.out.println("Introduceti noua descriere:");
+                        String descriereNoua = scanner.nextLine().trim();
+                        newel.setDescription(descriereNoua);
+                    }
+                    case "3" -> {
+                        System.out.println("Introduceti noua dimensiune:");
+                        int dimensiuneNoua = scanner.nextInt();
+                        scanner.nextLine();
+                        newel.setSize(dimensiuneNoua);
+                    }
+                    case "4" -> {
+                        System.out.println("Introduceti noua rezolutie:");
+                        String rezolutieNoua = scanner.nextLine().trim();
+                        ((Fotografie) newel).setResolution(rezolutieNoua);
+                    }
+                    case "5" -> {
+                        System.out.println("Introduceti noua locatie:");
+                        String locatieNoua = scanner.nextLine().trim();
+                        ((Fotografie) newel).setLocation(locatieNoua);
 
-                }
-                case "6" -> {
-                    System.out.println("Introduceti noul tip de camera:");
-                    String tipCameraNoua = scanner.nextLine().trim();
-                    ((Fotografie) newel).setCameraType(tipCameraNoua);
-                }
-                case "7" -> {
-                    System.out.println("Introduceti noile setari ale camerei:");
-                    String setariCameraNoi = scanner.nextLine().trim();
-                    ((Fotografie) newel).setCameraSettings(setariCameraNoi);
-                }
+                    }
+                    case "6" -> {
+                        System.out.println("Introduceti noul tip de camera:");
+                        String tipCameraNoua = scanner.nextLine().trim();
+                        ((Fotografie) newel).setCameraType(tipCameraNoua);
+                    }
+                    case "7" -> {
+                        System.out.println("Introduceti noile setari ale camerei:");
+                        String setariCameraNoi = scanner.nextLine().trim();
+                        ((Fotografie) newel).setCameraSettings(setariCameraNoi);
+                    }
 
-                case "0" -> exit = true;
-                default -> System.out.println("Optiune invalida.");
+                    case "0" -> exit = true;
+                    default -> System.out.println("Optiune invalida.");
+                }
             }
-        }
 
-        serviciuGalerie.updateElement(numeElementModificare, newel);
+            serviciuGalerie.updateElement(numeElementModificare, newel);
+        }
     }
 
     private static void meniuVideoclip() {
@@ -345,40 +347,42 @@ public class Main {
 
     public static void actualizeazaVideoclip(String numeElementModificare) {
         Element newel = serviciuGalerie.viewElement(numeElementModificare);
-        boolean exit = false;
-        while (!exit) {
-            meniuVideoclip();
-            String optiune = scanner.nextLine();
-            switch (optiune) {
-                case "1" -> {
-                    System.out.println("Introduceti noul nume:");
-                    String numeNou = scanner.nextLine().trim();
-                    newel.setName(numeNou);
-                }
-                case "2" -> {
-                    System.out.println("Introduceti noua descriere:");
-                    String descriereNoua = scanner.nextLine().trim();
-                    newel.setDescription(descriereNoua);
-                }
-                case "3" -> {
-                    System.out.println("Introduceti noua dimensiune:");
-                    int dimensiuneNoua = scanner.nextInt();
-                    scanner.nextLine();
-                    newel.setSize(dimensiuneNoua);
-                }
-                case "4" -> {
-                    System.out.println("Introduceti noua durata:");
-                    int durataNoua = scanner.nextInt();
-                    scanner.nextLine();
-                    ((Videoclip) newel).setDuration(durataNoua);
-                }
+        if (newel != null) {
+            boolean exit = false;
+            while (!exit) {
+                meniuVideoclip();
+                String optiune = scanner.nextLine();
+                switch (optiune) {
+                    case "1" -> {
+                        System.out.println("Introduceti noul nume:");
+                        String numeNou = scanner.nextLine().trim();
+                        newel.setName(numeNou);
+                    }
+                    case "2" -> {
+                        System.out.println("Introduceti noua descriere:");
+                        String descriereNoua = scanner.nextLine().trim();
+                        newel.setDescription(descriereNoua);
+                    }
+                    case "3" -> {
+                        System.out.println("Introduceti noua dimensiune:");
+                        int dimensiuneNoua = scanner.nextInt();
+                        scanner.nextLine();
+                        newel.setSize(dimensiuneNoua);
+                    }
+                    case "4" -> {
+                        System.out.println("Introduceti noua durata:");
+                        int durataNoua = scanner.nextInt();
+                        scanner.nextLine();
+                        ((Videoclip) newel).setDuration(durataNoua);
+                    }
 
-                case "0" -> exit = true;
-                default -> System.out.println("Optiune invalida.");
+                    case "0" -> exit = true;
+                    default -> System.out.println("Optiune invalida.");
+                }
             }
-        }
 
-        serviciuGalerie.updateElement(numeElementModificare, newel);
+            serviciuGalerie.updateElement(numeElementModificare, newel);
+        }
     }
 
     // 5
@@ -465,15 +469,17 @@ public class Main {
         serviciuGalerie.createAlbum(numeAlbum);
 
     }
-    private static void actulizeazaAlbum(){
+
+    private static void actulizeazaAlbum() {
         System.out.println("Introduceti numele albumului:");
         String numeAlbum = scanner.nextLine();
 
         System.out.println("Introduceti noul nume:");
         String numeNou = scanner.nextLine().trim();
 
-        serviciuGalerie.updateAlbum(numeAlbum,numeNou);
+        serviciuGalerie.updateAlbum(numeAlbum, numeNou);
     }
+
     // 10
     private static void adaugaElementAlbum() {
         System.out.println("Introduceti numele elementului de adaugat in album:");
