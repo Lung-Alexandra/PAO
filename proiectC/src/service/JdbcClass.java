@@ -556,17 +556,17 @@ public static void updateElement(Element element, String numeVechi) {
         }
     }
 
-    public static void deleteEtichetaElement(int etichetaId) {
-        try {
-            String deleteElementDinAlbumSql = "DELETE FROM element_eticheta WHERE eticheta_id = ?";
-            PreparedStatement deleteElementDinAlbumStatement = con.prepareStatement(deleteElementDinAlbumSql);
-            deleteElementDinAlbumStatement.setInt(1, etichetaId);
-            deleteElementDinAlbumStatement.executeUpdate();
-            deleteElementDinAlbumStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void deleteEtichetaElement(int etichetaId) {
+//        try {
+//            String deleteElementDinAlbumSql = "DELETE FROM element_eticheta WHERE eticheta_id = ?";
+//            PreparedStatement deleteElementDinAlbumStatement = con.prepareStatement(deleteElementDinAlbumSql);
+//            deleteElementDinAlbumStatement.setInt(1, etichetaId);
+//            deleteElementDinAlbumStatement.executeUpdate();
+//            deleteElementDinAlbumStatement.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public static void deleteEtichetaElement(Eticheta et) {
         try {
@@ -655,17 +655,17 @@ public static void updateElement(Element element, String numeVechi) {
         }
     }
 
-    public static void deleteEticheta(Eticheta et) {
-        try {
-            int tagId = getIDByNume("Eticheta", et.getName());
-            deleteEtichetaElement(tagId);
-            String deleteAlbumSql = "DELETE FROM Eticheta WHERE id = ?";
-            PreparedStatement deleteAlbumStatement = con.prepareStatement(deleteAlbumSql);
-            deleteAlbumStatement.setInt(1, tagId);
-            deleteAlbumStatement.executeUpdate();
-            deleteAlbumStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void deleteEticheta(Eticheta et) {
+//        try {
+//            int tagId = getIDByNume("Eticheta", et.getName());
+//            deleteEtichetaElement(tagId);
+//            String deleteAlbumSql = "DELETE FROM Eticheta WHERE id = ?";
+//            PreparedStatement deleteAlbumStatement = con.prepareStatement(deleteAlbumSql);
+//            deleteAlbumStatement.setInt(1, tagId);
+//            deleteAlbumStatement.executeUpdate();
+//            deleteAlbumStatement.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }
