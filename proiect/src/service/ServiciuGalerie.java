@@ -130,15 +130,18 @@ public class ServiciuGalerie {
             Element el = elements.get(name);
             if (el != null) {
                 Eticheta et = new Eticheta(tag);
-                //pentru a evita verificarea manuală a
-                // existenței etichetei înainte de a o
-                // adăuga în map
-                tags.putIfAbsent(et.getName(), et);
                 if (el.contineEticheta(et)) {
                     System.out.println("Eticheta deja existenta la element.");
-                } else {
+                }else {
+                    if (!tags.containsKey(et.getName())) {
+                        JdbcClass.insertEticheta(et);
+                    }
+                    //pentru a evita verificarea manuală a
+                    // existenței etichetei înainte de a o
+                    // adăuga în map
+                    tags.putIfAbsent(et.getName(), et);
                     el.addTagToElment(et);
-                    JdbcClass.insertEticheta(et);
+
                     JdbcClass.insertElementEticheta(el, et);
                     System.out.println("Eticheta adaugata cu succes.");
                 }
@@ -207,8 +210,13 @@ public class ServiciuGalerie {
             if (album != null) {
                 Element element = elements.get(elementName);
                 if (element != null) {
-                    album.addElementToAlbum(element);
-                    JdbcClass.insertAlbumElement(album, element);
+                    List<Element> elementeAlbum = album.getAlbumElements();
+                    if(!elementeAlbum.contains(element)) {
+                        album.addElementToAlbum(element);
+                        JdbcClass.insertAlbumElement(album, element);
+                    }else{
+                        System.out.println("Element deja existent in ablum!");
+                    }
                 } else {
                     System.out.println("Elementul nu exista!");
                 }
@@ -228,9 +236,13 @@ public class ServiciuGalerie {
             Album album = getAlbumByName(albumName);
             if (album != null) {
                 Element element = elements.get(elementName);
-                if (element != null) {
-                    album.removeElement(elementName);
-                    JdbcClass.deleteElementDinAlbum(elementName);
+                if (element != null) {  List<Element> elementeAlbum = album.getAlbumElements();
+                    if(elementeAlbum.contains(element)) {
+                        album.removeElement(elementName);
+                        JdbcClass.deleteElementDinAlbum(elementName);
+                    }else{
+                        System.out.println("Elementul " + elementName + " nu exista in albumul " + albumName);
+                    }
                 } else {
                     System.out.println("Elementul nu exista!");
                 }
