@@ -335,6 +335,7 @@ public class ServiciuGalerie {
 
     //17
     public int sizeOfGalery() {
+        AuditService.logAction("sizeOfGalery");
         return elements.values().stream()
                 .mapToInt(Element::getSize)
                 .sum();

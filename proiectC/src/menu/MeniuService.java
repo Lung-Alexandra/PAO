@@ -66,6 +66,7 @@ public class MeniuService implements Meniu {
         int totalSize = serviciuGalerie.sizeOfGalery();
 
         System.out.println("Dimensiunea totală a elementelor este: " + totalSize);
+
     }
 
 
