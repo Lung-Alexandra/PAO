@@ -17,7 +17,7 @@ public class AuditService {
             LocalDateTime timestamp = LocalDateTime.now();
             String formattedTimestamp = timestamp.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
-            printWriter.println(actionName + "," + formattedTimestamp);
+            printWriter.println(actionName + ", " + formattedTimestamp);
 
             printWriter.close();
         } catch (IOException e) {

@@ -432,8 +432,6 @@ public static void updateElement(Element element, String numeVechi) {
         List<Album> albume = new ArrayList<>();
 
         try {
-
-            
             String sql = "SELECT * FROM Album";
             ResultSet resultSet = QueryExecutor.executeQuery(sql);
 
