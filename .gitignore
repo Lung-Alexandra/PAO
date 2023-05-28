@@ -4,6 +4,12 @@ proiect/out/
 proiect/proiect.iml
 
 ### IntelliJ IDEA ###
+proiectC/.idea/
+proiectC/out/
+proiectC/proiect.iml
+
+
+### IntelliJ IDEA ###
 .idea/
 out/
 PAO.iml
