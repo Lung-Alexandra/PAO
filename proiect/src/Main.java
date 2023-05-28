@@ -223,7 +223,7 @@ public class Main {
         Element el = serviciuGalerie.viewElement(nume);
         if (el != null) {
             serviciuGalerie.removeElement(nume);
-            System.out.println("Elementul stears cu succes.");
+            System.out.println("Elementul sters cu succes.");
             System.out.println();
         } else {
             System.out.println("Elementul nu a fost gasit.");
