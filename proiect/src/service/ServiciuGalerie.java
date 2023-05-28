@@ -290,8 +290,13 @@ public class ServiciuGalerie {
     // Crearea unui album de imagini/videoclipuri
     public void createAlbum(String albumName) {
         AuditService.logAction("createAlbum");
-        JdbcClass.insertAlbum(new Album(albumName));
-        albums.add(new Album(albumName));
+        Album alb = getAlbumByName(albumName);
+        if (alb != null) {
+            System.out.println("Album exista deja");
+        } else {
+            JdbcClass.insertAlbum(new Album(albumName));
+            albums.add(new Album(albumName));
+        }
     }
 
     public List<Album> viewAllAlbums() {
@@ -316,7 +321,7 @@ public class ServiciuGalerie {
         }
     }
 
-    //
+    //17
     public int sizeOfGalery() {
         return elements.values().stream()
                 .mapToInt(Element::getSize)

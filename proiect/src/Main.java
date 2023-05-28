@@ -140,14 +140,14 @@ public class Main {
         System.out.println("Bun venit in galerie! Ce doriti sa faceti?");
         System.out.println("=== Meniu ===");
 
-        System.out.println("1. Vizualizarea tuturor imaginilor/videoclipurilor din galerie");
-        System.out.println("2. Adaugare imagine/videoclip in galerie");
-        System.out.println("3. Stergere imagine/videoclip din galerie");
-        System.out.println("4. Cautare imagine/videoclip in galerie dupa nume");
-        System.out.println("5. Actualizare imagine/videoclip din galerie");
-        System.out.println("6. Adaugare/Stergere eticheta la imagine/videoclip");
+        System.out.println("1. Vizualizarea tuturor fotografiilor/videoclipurilor din galerie");
+        System.out.println("2. Adaugare fotografie/videoclip in galerie");
+        System.out.println("3. Stergere fotografie/videoclip din galerie");
+        System.out.println("4. Cautare fotografie/videoclip in galerie dupa nume");
+        System.out.println("5. Actualizare fotografie/videoclip din galerie");
+        System.out.println("6. Adaugare/Stergere eticheta la fotografie/videoclip");
         System.out.println("7. Vizualizare elemente dupa eticheta");
-        System.out.println("8. Sortare imagini/videoclipuri dupa diferite criterii");
+        System.out.println("8. Sortare fotografii/videoclipuri dupa diferite criterii");
         System.out.println("9. Creare album gol");
         System.out.println("10. Vizualizare toate albumele");
         System.out.println("11. Actualizare nume album");
@@ -155,7 +155,7 @@ public class Main {
         System.out.println("13. Stergere element din album");
         System.out.println("14. Stergere album");
         System.out.println("15. Vizualizare elemente album");
-        System.out.println("16. Filtrare imagini/videoclipuri dupa diferite criterii");
+        System.out.println("16. Filtrare fotografii/videoclipuri dupa diferite criterii");
         System.out.println("17. Afisare dimensiune totala");
 
         System.out.println("0. Iesire");
@@ -218,7 +218,7 @@ public class Main {
 
     // 3
     private static void stergeElement() {
-        System.out.println("Introduceti numele imaginii/videoclipului:");
+        System.out.println("Introduceti numele fotografiii/videoclipului:");
         String nume = scanner.nextLine().trim();
         Element el = serviciuGalerie.viewElement(nume);
         if (el != null) {
@@ -529,7 +529,7 @@ public class Main {
         String tip = scanner.nextLine().trim();
         switch (tip) {
             case "nume" -> {
-                System.out.println("Introduceti numle:");
+                System.out.println("Introduceti numele:");
                 String nume = scanner.nextLine().trim();
                 List<Element> elDupaNume = Filtru.filtrareDupaNume(serviciuGalerie.viewAllElements(), nume);
                 if (!elDupaNume.isEmpty()) {
@@ -544,13 +544,16 @@ public class Main {
                 while (data == null) {
                     data = serviciuGalerie.readLocalData(scanner.nextLine());
                 }
+                System.out.println("Introduceti data de sfarsit (format: dd/MM/yyyy):");
                 LocalDate data2 = null;
                 while (data2 == null) {
                     data2 = serviciuGalerie.readLocalData(scanner.nextLine());
                 }
+                data = data.minusDays(1);
+                data2 = data2.plusDays(1);
                 List<Element> elDupaData = Filtru.filtrareDupaData(serviciuGalerie.viewAllElements(), data, data2);
                 if (!elDupaData.isEmpty()) {
-                    System.out.println("Imagini dupa data:");
+                    System.out.println("Fotografii dupa data:");
                     elDupaData.forEach(System.out::println);
                 } else {
                     System.out.println("Nu exista elemente!");
@@ -565,7 +568,7 @@ public class Main {
                 scanner.nextLine();
                 List<Element> elDupaDimensiune = Filtru.filtrareDupaDimensiune(serviciuGalerie.viewAllElements(), dimmin, dimmax);
                 if (!elDupaDimensiune.isEmpty()) {
-                    System.out.println("Imagini dupa dimensiune:");
+                    System.out.println("Fotografii dupa dimensiune:");
                     elDupaDimensiune.forEach(System.out::println);
                 } else {
                     System.out.println("Nu exista elemente!");

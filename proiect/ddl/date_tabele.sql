@@ -7,6 +7,8 @@ from Fotografie;
 select *
 from Videoclip;
 select *
+from Eticheta;
+select *
 from Album;
 select *
 from album_element;
