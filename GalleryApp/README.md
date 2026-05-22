@@ -1,56 +1,47 @@
-# PAO
+# GalleryApp
 
-## Acțiuni/Interogări:
+## Actions and Queries
 
+1. View all images and videos in the gallery
+2. Add an image or video to the gallery
+3. Delete an image or video from the gallery
+4. Search for an image or video by name
+5. Update the name and description of an image or video
+6. Add or remove a tag from an image or video
+7. View elements by tag
+8. Sort images and videos using different criteria
+9. Create an empty album
+10. Add elements to an album
+11. Remove an element from an album
+12. Delete an album
+13. View album contents
+14. Filter images and videos using different criteria
 
-1. Vizualizarea tuturor imaginilor/videoclipurilor din galerie
-2. Adaugare imagine/videoclip in galerie
-3. Stergere imagine/videoclip din galerie
-4. Cautare imagine/videoclip in galerie dupa nume
-5. Actualizare (nume si descriere) imagine/videoclip din galerie 
-6. Adaugare/Stergere eticheta la imagine/videoclip
-7. Vizualizare elemente dupa eticheta
-8. Sortare imagini/videoclipuri dupa diferite criterii
-9. Creare album gol
-10. Adaugare elemente in album
-11. Stergere element din album
-12. Stergere album
-13. Vizualizare elemente album
-14. Filtrare imagini/videoclipuri dupa diferite criterii
-## Tipuri de obiecte:
+## Object Types
 
+1. `Element`
+Represents a general media item, either an image or a video. It includes attributes such as name, description, size, and creation date and time.
 
-1.Element 
-- o entitate care reprezinta un videoclip sau o imagine în general. 
-Aceasta  are mai multe atribute, cum ar fi nume, descriere, dimensiune, dată și oră a creării.
+2. `Videoclip`
+An entity derived from `Element` that includes additional information such as video duration.
 
-2.Videoclip
-- o entitate derivata din element care include informatii suplimentare precum
-durata filmuletului
+3. `Imagine`
+An entity derived from `Element` that includes data such as resolution or location.
 
-3.Imagine: 
-- o entitate derivata din element care include rezoluția sau locația.
+4. `Fotografie`
+A class derived from `Imagine` that stores extra information, such as the camera type and the settings used when the photo was taken.
 
-4.Fotografie: 
-- aceasta este o entitate derivată din imagine, care include informații suplimentare, 
-cum ar fi tipul aparatului de fotografiat și setările folosite în momentul realizării fotografiei.
+5. `Eticheta`
+Represents a category or theme associated with one or more images or videos. It is used to organize and manage media items based on different criteria.
 
-5.Etichetă: 
-- o etichetă este o entitate care reprezintă o categorie sau o temă asociată cu o imagine sau cu mai multe imagini. 
-Aceasta poate fi utilizată pentru a organiza și gestiona imaginile în funcție de diverse criterii.
+6. `Album`
+Represents a collection of images or videos grouped by specific criteria. Albums can be used to organize media by event, location, or theme.
 
-6.Album: 
-- un album este o entitate care grupează mai multe imagini sau videoclipuri în funcție de anumite criterii. 
-Acesta poate fi utilizat pentru a organiza și gestiona imaginile si videoclipurile în funcție de diverse criterii, 
-cum ar fi evenimente, locații sau teme.
+7. `ServiciuGalerie`
+A service class that provides the system operations, such as adding, deleting, searching, and sorting media items, as well as creating and managing tags and albums.
 
-7.Serviciu de galerie: 
-- o clasă de servicii care oferă operațiile sistemului, cum ar fi adăugarea, ștergerea, căutarea și sortarea imaginilor, 
-crearea și gestionarea etichetelor și a albumelor, precum și alte operații specifice.
+8. `Filtru`
+A helper class used to filter images and videos according to criteria such as name, date, size, or other attributes.
 
-8.Filtru: 
-- o clasă utilizată pentru a filtra imaginile în funcție de diverse criterii, 
-cum ar fi numele, data, dimensiunea sau alte atribute.
-
-9.ElementComparator:
-- o clasă ce furnizează o metodă de comparare a două obiecte de tip Element pe baza unui criteriu specificat.
+9. `ElementComparator`
+A class that provides comparison logic for two `Element` objects based on a chosen criterion.

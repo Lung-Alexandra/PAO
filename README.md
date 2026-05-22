@@ -1,21 +1,27 @@
 # PAO
 
-Cerinte
+## Requirements
 
-Etapa I
-1) Definirea sistemului
-Să se creeze o lista pe baza temei alese cu cel puțin 10 acțiuni/interogări care se pot face în cadrul sistemului și o lista cu cel puțin 8 tipuri de obiecte.
-2) Implementare
-Sa se implementeze în limbajul Java o aplicație pe baza celor definite la primul punct.
-Aplicația va conține:
-• clase simple cu atribute private / protected și metode de acces
-• cel puțin 2 colecții diferite capabile să gestioneze obiectele definiteanterior (eg: List, Set, Map, etc.) dintre care cel puțin una sa fie sortata – se vor folosi array-uri uni- /bidimensionale în cazul în care nu se parcurg colectiile pana la data checkpoint-ului.
-• utilizare moștenire pentru crearea de clase adiționale și utilizarea lor încadrul colecțiilor;
-• cel puțin o clasă serviciu care sa expună operațiile sistemului
-• o clasa Main din care sunt făcute apeluri către servicii
+### Stage I
 
-Etapa II
-1) Extindeți proiectul din prima etapa prin realizarea persistentei utilizând o baza de date relationala si JDBC.
-Să se realizeze servicii care sa expună operații de tip create, read, update si delete pentru cel puțin 4 dintre clasele definite. Se vor realiza servicii singleton generice pentru scrierea și citirea din baza de date.
-2) Realizarea unui serviciu de audit
-Se va realiza un serviciu care sa scrie într-un fișier de tip CSV de fiecare data când este executată una dintre acțiunile descrise în prima etapa. Structura fișierului: nume_actiune, timestamp
+1. System definition
+Create a list, based on the chosen theme, containing at least 10 actions or queries that can be performed in the system, and a list with at least 8 types of objects.
+
+2. Implementation
+Implement a Java application based on the definitions from the first point.
+
+The application must include:
+
+- simple classes with private or protected attributes and accessor methods
+- at least 2 different collections capable of managing the previously defined objects (for example `List`, `Set`, `Map`), with at least one sorted collection; one-dimensional or two-dimensional arrays may be used only if collections are not covered by the checkpoint date
+- inheritance used to create additional classes and to use them inside collections
+- at least one service class that exposes the system operations
+- a `Main` class that calls the service layer
+
+### Stage II
+
+1. Extend the first stage project by adding persistence with a relational database and JDBC.
+Create services that expose create, read, update, and delete operations for at least 4 of the defined classes. Generic singleton services must be implemented for reading from and writing to the database.
+
+2. Create an audit service.
+Implement a service that writes to a CSV file every time one of the actions described in Stage I is executed. The file structure must be: `action_name, timestamp`.
